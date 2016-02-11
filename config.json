@@ -1,0 +1,10 @@
+{
+  "ports": {
+    "plain": 7000,
+    "secure": false
+  },
+  "certs": {
+    "cert": "./certs/server.crt",
+    "key": "./certs/server.key"
+  }
+}

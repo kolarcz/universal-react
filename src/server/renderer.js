@@ -1,0 +1,82 @@
+import { createMemoryHistory } from 'history';
+import { match, RouterContext } from 'react-router';
+import ReactDOMServer from 'react-dom/server';
+import Helmet from 'react-helmet';
+import { Provider } from 'react-redux';
+import React from 'react';
+import fs from 'fs';
+
+import makeRoutes from '../shared/makeRoutes';
+import makeStore from '../shared/makeStore';
+import makeHistory from '../shared/makeHistory';
+
+var webpackConfig = require('../../webpack/config');
+
+var favicon = require('../shared/favicon.ico');
+
+export default function (req, res) {
+  if (__DEV__) {
+    webpackIsomorphicTools.refresh();
+  }
+
+  const routes = makeRoutes();
+  const history = makeHistory();
+  const location = history.createLocation(req.url);
+  const store = makeStore(history, undefined);
+
+  match({ routes, location }, (error, redirectLocation, renderProps) => {
+    if (error) {
+      return res.status(500).end('Internal server error');
+    } else if (redirectLocation) {
+      return res.status(302).redirect(redirectLocation.pathname + redirectLocation.search);
+    } else if (!renderProps) {
+      return res.status(404).end('Not found');
+    }
+
+    const root = ReactDOMServer.renderToString(
+      <Provider store={store}>
+        <RouterContext {...renderProps} />
+      </Provider>
+    );
+
+    const assets = webpackIsomorphicTools.assets();
+    const helmet = Helmet.rewind();
+
+    /*if (!__DEV__ && req.isSpdy) {
+      Object.keys(assets.styles).forEach((key, i) => {
+        const file = assets.styles[key];
+        res.push(file, { response: { 'Content-Type': 'text/css' } }).end(fs.readFileSync(webpackConfig.output.path + file, 'utf-8'));
+      });
+      Object.keys(assets.javascript).forEach((key, i) => {
+        const file = assets.javascript[key];
+        res.push(file, { response: { 'Content-Type': 'application/javascript' } }).end(fs.readFileSync(webpackConfig.output.path + file, 'utf-8'));
+      });
+    }*/
+
+    const content = '<!DOCTYPE html>' + ReactDOMServer.renderToString(
+      <html>
+        <head>
+          <meta charSet="utf8" />
+          {Object.keys(assets.styles).map((key, i) =>
+            <link rel="stylesheet" type="text/css" href={assets.styles[key]} key={i} />
+          )}
+          {helmet.title.toComponent()}
+          {helmet.base.toComponent()}
+          {helmet.meta.toComponent()}
+          {helmet.link.toComponent()}
+          {helmet.script.toComponent()}
+        </head>
+        <body>
+          <div id="root" dangerouslySetInnerHTML={{ __html: root }}></div>
+          <script dangerouslySetInnerHTML={{ __html: `window.$STATE = ${JSON.stringify(store.getState())};` }}></script>
+          {Object.keys(assets.javascript).map((key, i) =>
+            <script src={assets.javascript[key]} key={i} />
+          )}
+        </body>
+      </html>
+    );
+
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.end(content);
+  });
+};
