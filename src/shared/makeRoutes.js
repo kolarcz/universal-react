@@ -2,14 +2,16 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 
 import Layout from '../shared/containers/Layout';
-import Page1 from '../shared/containers/Page1';
-import Page2 from '../shared/containers/Page2';
+import Home from '../shared/containers/Home';
+import Counter from '../shared/containers/Counter';
+import Todo from '../shared/containers/Todo';
 
 const makeRoutes = () => {
   return (
     <Route path="/" component={Layout}>
-      <IndexRoute component={Page1}/>
-      <Route path="/page2/:id" component={Page2}/>
+      <IndexRoute component={Home}/>
+      <Route path="/counter" component={Counter}/>
+      <Route path="/todo" component={Todo}/>
     </Route>
   );
 }

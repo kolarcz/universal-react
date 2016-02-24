@@ -19,7 +19,7 @@ export function increaseAsync() {
   return dispatch => {
     setTimeout(() => {
       dispatch(increase());
-    }, 1000);
+    }, 500);
   };
 };
 
