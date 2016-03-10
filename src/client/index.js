@@ -7,8 +7,8 @@ import makeStore from '../shared/makeStore';
 import makeRoutes from '../shared/makeRoutes';
 import makeHistory from '../shared/makeHistory';
 
-const history = makeHistory();
-const store = makeStore(history, window.$STATE);
+const store = makeStore(window.$STATE);
+const history = makeHistory(store);
 const routes = makeRoutes();
 
 ReactDOM.render((

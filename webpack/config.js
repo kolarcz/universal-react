@@ -8,7 +8,9 @@ var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./a
 module.exports = {
   devtool: __DEV__ ? 'cheap-module-eval-source-map' : null,
   entry: (__DEV__ ? ['webpack-hot-middleware/client'] : [])
-    .concat(__dirname + '/../src/client/index.js'),
+    .concat([
+      __dirname + '/../src/client/index.js'
+    ]),
   output: {
     filename: 'bundle.js',
     path: __dirname + '/../dist',

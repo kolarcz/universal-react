@@ -1,4 +1,3 @@
-import { createMemoryHistory } from 'history';
 import { match, RouterContext } from 'react-router';
 import ReactDOMServer from 'react-dom/server';
 import Helmet from 'react-helmet';
@@ -19,10 +18,10 @@ export default function (req, res) {
     webpackIsomorphicTools.refresh();
   }
 
-  const routes = makeRoutes();
+  const store = makeStore(undefined);
   const history = makeHistory();
+  const routes = makeRoutes();
   const location = history.createLocation(req.url);
-  const store = makeStore(history, undefined);
 
   match({ routes, location }, (error, redirectLocation, renderProps) => {
     if (error) {

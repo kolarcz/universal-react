@@ -1,6 +1,7 @@
 export const INCREASE = 'universal-react/counter/INCREASE';
 export const DECREASE = 'universal-react/counter/DECREASE';
 
+
 export default function (state = 1, action) {
   switch (action.type) {
     case INCREASE: return state + 1;
@@ -8,6 +9,7 @@ export default function (state = 1, action) {
     default: return state;
   }
 };
+
 
 export function increase() {
   return {

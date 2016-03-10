@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet';
 
 import { increase, increaseAsync, decrease } from '../modules/count';
 
@@ -12,11 +12,22 @@ class Counter extends Component {
       <div>
         <Helmet title="Counter" />
         <h2>Counter</h2>
-        <button onClick={ () => increase() }>+</button>
-        <button onClick={ () => increaseAsync() }>+ async</button>
-        <button onClick={ () => decrease() }>-</button>
-        <br/><br/>
-        <span> {count}</span>
+
+        <div className="uk-form">
+          <input value={count} disabled /><br/><br/>
+
+          <div className="uk-button-group">
+            <button className="uk-button" onClick={ () => increase() }>
+              <i className="uk-icon-plus"></i>
+            </button>
+            <button className="uk-button" onClick={ () => decrease() }>
+              <i className="uk-icon-minus"></i>
+            </button>
+            <button className="uk-button" onClick={ () => increaseAsync() }>
+              <i className="uk-icon-plus"></i> async
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
