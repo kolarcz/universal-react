@@ -56,6 +56,7 @@ export default function (req, res) {
       <html>
         <head>
           <meta charSet="utf8" />
+          <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no" />
           {Object.keys(assets.styles).map((key, i) =>
             <link rel="stylesheet" type="text/css" href={assets.styles[key]} key={i} />
           )}

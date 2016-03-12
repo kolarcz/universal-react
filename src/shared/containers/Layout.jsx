@@ -12,6 +12,14 @@ if (__CLIENT__) {
 }
 
 class Layout extends Component {
+  getLogo() {
+    return (
+      <span>
+        <i className="uk-icon-cube"></i> Universal React
+      </span>
+    );
+  }
+
   getLinks() {
     return [
       <Link activeClassName="uk-active" to="/" key="/" onlyActiveOnIndex>Home</Link>,
@@ -36,9 +44,12 @@ class Layout extends Component {
         </div>
 
         <nav className="uk-navbar uk-margin-top uk-margin-bottom">
-          <span className="uk-navbar-toggle uk-visible-small" data-uk-offcanvas="{target:'#offcanvas-navbar'}"></span>
+          <a href="#offcanvas-navbar" className="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
           <span className="uk-navbar-brand uk-hidden-small">
-            <i className="uk-icon-cube"></i> Universal React
+            {this.getLogo()}
+          </span>
+          <span className="uk-navbar-brand uk-navbar-center uk-visible-small" style={{maxWidth: '65%'}}>
+            {this.getLogo()}
           </span>
           <ul className="uk-navbar-nav uk-hidden-small">
             {this.getLinks()}
