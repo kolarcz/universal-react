@@ -39,12 +39,11 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loader: 'babel-loader',
-      exclude: /node_modules/,
-      query: {
+      loader: `babel-loader?${JSON.stringify({
         presets: ['react', 'es2015'].concat(__DEV__ ? 'react-hmre' : []),
         plugins: ['add-module-exports']
-      }
+      })}${__DEV__ ? '!eslint-loader' : ''}`,
+      exclude: /node_modules/
     }, {
       test: /\.css$/,
       loader: __DEV__
