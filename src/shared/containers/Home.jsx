@@ -6,10 +6,10 @@ class Home extends Component {
     return (
       <div>
         <Helmet title="Home" />
-        <h2>Home</h2>
+        <h1>Home</h1>
       </div>
     );
   }
-};
+}
 
 export default Home;

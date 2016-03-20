@@ -4,16 +4,14 @@ import { Route, IndexRoute } from 'react-router';
 import Layout from '../shared/containers/Layout';
 import Home from '../shared/containers/Home';
 import Counter from '../shared/containers/Counter';
-import Todo from '../shared/containers/Todo';
+import Todos from '../shared/containers/Todos';
 
-const makeRoutes = () => {
-  return (
-    <Route path="/" component={Layout}>
-      <IndexRoute component={Home}/>
-      <Route path="/counter" component={Counter}/>
-      <Route path="/todo" component={Todo}/>
-    </Route>
-  );
-}
+const makeRoutes = () => (
+  <Route path="/" component={Layout}>
+    <IndexRoute component={Home} />
+    <Route path="/counter" component={Counter} />
+    <Route path="/todos" component={Todos} />
+  </Route>
+);
 
 export default makeRoutes;

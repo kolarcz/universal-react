@@ -7,9 +7,9 @@ function makeHistory(store) {
     return syncHistoryWithStore(browserHistory, store, {
       selectLocationState: (state) => state.router
     });
-  } else {
-    return createMemoryHistory();
   }
+
+  return createMemoryHistory();
 }
 
 export default makeHistory;

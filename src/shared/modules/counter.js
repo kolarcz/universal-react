@@ -8,14 +8,14 @@ export default function (state = 1, action) {
     case DECREASE: return state - 1;
     default: return state;
   }
-};
+}
 
 
 export function increase() {
   return {
     type: INCREASE
-  }
-};
+  };
+}
 
 export function increaseAsync() {
   return dispatch => {
@@ -23,10 +23,10 @@ export function increaseAsync() {
       dispatch(increase());
     }, 500);
   };
-};
+}
 
 export function decrease() {
   return {
     type: DECREASE
-  }
-};
+  };
+}

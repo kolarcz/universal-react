@@ -1,55 +1,51 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-
-import { addTodo, markTodo, deleteTodo } from '../modules/todo';
+import React, { Component, PropTypes } from 'react';
 
 class Todo extends Component {
-  addTodo(e) {
-    e.preventDefault();
+  constructor(props) {
+    super(props);
+    this.markTodo = this.markTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+  }
 
-    const textElem = this.refs.text;
-    textElem.focus();
-    if (textElem.value.length) {
-      this.props.addTodo(textElem.value);
-      textElem.value = '';
-    }
+  markTodo() {
+    this.props.markTodo(this.props.index);
+  }
+
+  deleteTodo(e) {
+    e.preventDefault();
+    this.props.deleteTodo(this.props.index);
   }
 
   render() {
+    const { todo } = this.props;
+
+    const labelStyle = todo.done ? { color: '#bbb', textDecoration: 'line-through' } : {};
+    labelStyle.marginBottom = '0';
+    labelStyle.fontWeight = 'normal';
+
     return (
-      <div>
-        <Helmet title="Todo" />
-        <h2>Todo</h2>
-
-        <form className="uk-form" onSubmit={ (e) => this.addTodo(e) }>
-          <input ref="text" />
-          <button type="submit" className="uk-button uk-button-primary uk-margin-small-left">
-            Add new
-          </button>
-
-          <ul className="uk-list uk-list-striped uk-width-1-1 uk-width-medium-1-3">
-            {this.props.todo.map((todo, index) => (
-              <li key={index} style={todo.done ? {'color': '#bbb', 'text-decoration': 'line-through'} : null}>
-                <button className="uk-button uk-button-danger uk-button-mini uk-float-right" onClick={ () => this.props.deleteTodo(index) }>
-                  <i className="uk-icon-close"></i>
-                </button>
-                <input type="checkbox" id={'todo' + index} checked={todo.done} />
-                <label className="uk-margin-small-left" htmlFor={'todo' + index} onClick={ () => this.props.markTodo(index) }>
-                  {todo.text}
-                </label>
-              </li>
-            ))}
-          </ul>
-        </form>
-
-      </div>
+      <li className="list-group-item">
+        <button
+          className="btn btn-danger btn-xs"
+          style={{ float: 'right' }}
+          onClick={this.deleteTodo}
+        >
+          <span className="glyphicon glyphicon-trash"></span>
+        </button>
+        <label style={labelStyle}>
+          <input checked={todo.done} type="checkbox" onClick={this.markTodo} />
+          {` ${todo.text}`}
+        </label>
+      </li>
     );
   }
+}
+
+Todo.propTypes = {
+  index: PropTypes.number.isRequired,
+  todo: PropTypes.object.isRequired,
+  markTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired
 };
 
-export default connect(state => ({
-  todo: state.todo
-}), {
-  addTodo, markTodo, deleteTodo
-})(Todo);
+export default Todo;

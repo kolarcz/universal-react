@@ -1,26 +1,26 @@
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-var webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpack = require('webpack');
 
-var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./assets'))
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./assets'))
   .development(__DEV__);
 
 module.exports = {
   devtool: __DEV__ ? 'cheap-module-eval-source-map' : null,
   entry: (__DEV__ ? ['webpack-hot-middleware/client'] : [])
     .concat([
-      __dirname + '/../src/client/index.js'
+      `${__dirname}/../src/client/index.js`
     ]),
   output: {
     filename: 'bundle.js',
-    path: __dirname + '/../dist',
+    path: `${__dirname}/../dist`,
     publicPath: '/'
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(__ENV__),
-      '__DEV__': __DEV__,
-      '__CLIENT__': true
+      __CLIENT__: true,
+      __DEV__
     }),
     new webpack.optimize.OccurenceOrderPlugin()
   ].concat(__DEV__ ? [

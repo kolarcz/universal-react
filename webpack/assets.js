@@ -1,4 +1,4 @@
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 
 module.exports = {
   debug: false,
@@ -8,21 +8,21 @@ module.exports = {
   assets: {
     styles: {
       extensions: ['css', 'scss'],
-      parser: function (module, options, log) {
-        return __DEV__
+      parser: (module, options, log) => (
+        __DEV__
           ? WebpackIsomorphicToolsPlugin.css_modules_loader_parser(module, options, log)
-          : module.source;
-      },
-      path: function (module, options, log) {
-        return __DEV__
+          : module.source
+      ),
+      path: (module, options, log) => (
+        __DEV__
           ? WebpackIsomorphicToolsPlugin.style_loader_path_extractor(module, options, log)
-          : module.name;
-      },
-      filter: function (module, regex, options, log) {
-        return __DEV__
+          : module.name
+      ),
+      filter: (module, regex, options, log) => (
+        __DEV__
           ? WebpackIsomorphicToolsPlugin.style_loader_filter(module, regex, options, log)
-          : regex.test(module.name);
-      }
+          : regex.test(module.name)
+      )
     },
     fonts: {
       extensions: ['eot', 'ttf', 'woff', 'woff2'],
