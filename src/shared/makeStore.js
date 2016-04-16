@@ -7,7 +7,7 @@ function makeStore(apiClient, initialState) {
   let composed;
 
   if (__DEV__) {
-    const createLogger = require('redux-logger').default;
+    const createLogger = require('redux-logger');
     const persistState = require('redux-devtools').persistState;
 
     composed = compose(
