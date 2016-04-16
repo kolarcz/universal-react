@@ -41,7 +41,7 @@ module.exports = {
       test: /\.jsx?$/,
       loader: `babel-loader?${JSON.stringify({
         presets: ['react', 'es2015'].concat(__DEV__ ? 'react-hmre' : []),
-        plugins: ['add-module-exports']
+        plugins: ['add-module-exports', 'transform-object-rest-spread']
       })}${__DEV__ ? '!eslint-loader' : ''}`,
       exclude: /node_modules/
     }, {
@@ -55,13 +55,13 @@ module.exports = {
         ? 'style-loader!css-loader!sass-loader'
         : ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
     }, {
-      test: /\.(eot|ttf|woff2?)$/,
+      test: /\.(eot|ttf|woff2?)(\?.*)?$/,
       loader: 'url-loader?name=[hash:base64:6].[ext]&limit=50000'
     }, {
-      test: /\.(gif|jpe?g|png|svg)$/,
+      test: /\.(gif|jpe?g|png|svg)(\?.*)?$/,
       loader: 'url-loader?name=[hash:base64:6].[ext]&limit=10000'
     }, {
-      test: /\.ico$/,
+      test: /\.ico(\?.*)?$/,
       loader: 'url-loader?name=[hash:base64:6].[ext]&limit=1'
     }]
   }

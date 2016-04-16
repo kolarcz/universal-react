@@ -1,10 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import activeComponent from 'react-router-active-component';
+import { asyncConnect } from 'redux-async-connect';
 
-const Link = activeComponent('li', { linkClassName: 'uk-offcanvas-close' });
+import { isLoaded as isUserLoaded } from '../modules/user';
+
+const Link = activeComponent('li');
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+
+import './Layout.scss';
 
 if (__CLIENT__) {
   require('script!jquery/dist/jquery.min.js');
@@ -13,11 +19,13 @@ if (__CLIENT__) {
 
 class Layout extends Component {
   render() {
+    const { user } = this.props;
+
     return (
       <div>
         <Helmet link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]} />
 
-        <header className="navbar navbar-default navbar-static-top" id="top" role="banner">
+        <header className="navbar navbar-default navbar-fixed-top" id="top" role="banner">
           <div className="container">
             <div className="navbar-header">
               <button
@@ -37,9 +45,34 @@ class Layout extends Component {
             <nav id="bs-navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
                 <Link to="/" onlyActiveOnIndex>Home</Link>
-                <Link to="/counter" key="/counter">Counter</Link>
-                <Link to="/todos" key="/todo">Todos</Link>
+                <Link to="/counter">Counter</Link>
+                <Link to="/todos">Todos</Link>
               </ul>
+              <ul className="nav navbar-nav navbar-right">
+                { user.name ? (
+                  <li>
+                    <a href="/logout">Logout</a>
+                  </li>
+                ) : (
+                  <Link to="/login">Login</Link>
+                )}
+              </ul>
+              { user.name ? (
+                <p className="navbar-text navbar-right" style={{ marginRight: '20px' }}>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      margin: '-13px 12px -13px 0px',
+                      background: `url('${user.photo}') #ddd`,
+                      backgroundSize: '100%'
+                    }}
+                  />
+                  Signed in as <strong>{user.name}</strong>
+                </p>
+              ) : null }
             </nav>
           </div>
         </header>
@@ -53,7 +86,14 @@ class Layout extends Component {
 }
 
 Layout.propTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
+  user: PropTypes.any,
+  store: PropTypes.any
 };
 
-export default Layout;
+export default asyncConnect([{
+  key: 'user',
+  promise: ({ store: { getState }, helpers: { apiClient } }) => (
+    isUserLoaded(getState()) ? getState().reduxAsyncConnect.user : apiClient.get('/userInfo')
+  )
+}])(Layout);

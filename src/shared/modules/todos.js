@@ -1,6 +1,6 @@
-export const ADD_TODO = 'universal-react/todos/ADD_TODO';
-export const MARK_TODO = 'universal-react/todos/MARK_TODO';
-export const DELETE_TODO = 'universal-react/todos/DELETE_TODO';
+const ADD_TODO = 'universal-react/todos/ADD_TODO';
+const MARK_TODO = 'universal-react/todos/MARK_TODO';
+const DELETE_TODO = 'universal-react/todos/DELETE_TODO';
 
 
 export default function (state = [], action) {
@@ -14,7 +14,7 @@ export default function (state = [], action) {
     case MARK_TODO:
       return state.map((todo, index) => {
         if (index === action.i) {
-          return Object.assign({}, todo, { done: !todo.done });
+          return { ...todo, done: !todo.done };
         }
         return todo;
       });

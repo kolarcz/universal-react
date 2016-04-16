@@ -6,7 +6,8 @@
     "comma-dangle": 0,
     "no-console": 0,
     "no-shadow": 0,
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "react/jsx-no-bind": 0
   },
   "globals": {
     "__DEV__": false,

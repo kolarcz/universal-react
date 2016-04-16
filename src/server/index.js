@@ -5,8 +5,27 @@ import compress from 'compression';
 import bodyParser from 'body-parser';
 import spdy from 'spdy';
 import fs from 'fs';
+import { defaultsDeep } from 'lodash';
 
-const CONFIG = require('../../config');
+const CONFIG = defaultsDeep({
+  "sessionSecret": process.env.SESSION_SECRET,
+  "ports": {
+    "plain": process.env.PORT,
+    "secure": process.env.PORT_SECURE
+  },
+  "social": {
+    "facebook": {
+      "clientId": process.env.SOCIAL_FACEBOOK_ID,
+      "clientSecret": process.env.SOCIAL_FACEBOOK_SECRET,
+      "callbackUrl": process.env.SOCIAL_FACEBOOK_URL
+    },
+    "google": {
+      "clientId": process.env.SOCIAL_GOOGLE_ID,
+      "clientSecret": process.env.SOCIAL_GOOGLE_SECRET,
+      "callbackUrl": process.env.SOCIAL_GOOGLE_URL
+    }
+  }
+}, require('../../config'));
 
 const app = express();
 
@@ -17,14 +36,18 @@ if (CONFIG.ports.plain && CONFIG.ports.secure) {
 
 app.use(compress());
 app.use(session({
-  secret: 'test',
+  secret: CONFIG.sessionSecret,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  name: 'sid'
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  require('./routes').default(CONFIG)(req, res, next);
+});
 
 if (__DEV__) {
   const webpack = require('webpack');
@@ -61,5 +84,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../../webpac
 global.webpackIsomorphicTools
   .development(__DEV__)
   .server(`${__dirname}/../../`, () => {
-    app.get('*', require('./renderer').default);
+    app.get('*', (req, res) => {
+      require('./renderer').default(req, res);
+    });
   });

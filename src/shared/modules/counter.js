@@ -1,5 +1,5 @@
-export const INCREASE = 'universal-react/counter/INCREASE';
-export const DECREASE = 'universal-react/counter/DECREASE';
+const INCREASE = 'universal-react/counter/INCREASE';
+const DECREASE = 'universal-react/counter/DECREASE';
 
 
 export default function (state = 1, action) {
