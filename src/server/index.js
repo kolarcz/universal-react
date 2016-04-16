@@ -8,21 +8,21 @@ import fs from 'fs';
 import { defaultsDeep } from 'lodash';
 
 const CONFIG = defaultsDeep({
-  "sessionSecret": process.env.SESSION_SECRET,
-  "ports": {
-    "plain": process.env.PORT,
-    "secure": process.env.PORT_SECURE
+  sessionSecret: process.env.SESSION_SECRET,
+  ports: {
+    plain: process.env.PORT,
+    secure: process.env.PORT_SECURE
   },
-  "social": {
-    "facebook": {
-      "clientId": process.env.SOCIAL_FACEBOOK_ID,
-      "clientSecret": process.env.SOCIAL_FACEBOOK_SECRET,
-      "callbackUrl": process.env.SOCIAL_FACEBOOK_URL
+  social: {
+    facebook: {
+      clientId: process.env.SOCIAL_FACEBOOK_ID,
+      clientSecret: process.env.SOCIAL_FACEBOOK_SECRET,
+      callbackUrl: process.env.SOCIAL_FACEBOOK_URL
     },
-    "google": {
-      "clientId": process.env.SOCIAL_GOOGLE_ID,
-      "clientSecret": process.env.SOCIAL_GOOGLE_SECRET,
-      "callbackUrl": process.env.SOCIAL_GOOGLE_URL
+    google: {
+      clientId: process.env.SOCIAL_GOOGLE_ID,
+      clientSecret: process.env.SOCIAL_GOOGLE_SECRET,
+      callbackUrl: process.env.SOCIAL_GOOGLE_URL
     }
   }
 }, require('../../config'));

@@ -9,14 +9,7 @@ const app = express.Router(); // eslint-disable-line new-cap
 const users = [];
 let initialized = false;
 
-export default function (CONFIG) {
-  if (!initialized) {
-    initialize(CONFIG);
-  }
-  return app;
-}
-
-function initialize (CONFIG) {
+function initialize(CONFIG) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser((id, done) => done(null, users[id] || false));
 
@@ -133,4 +126,11 @@ function initialize (CONFIG) {
 
 
   initialized = true;
+}
+
+export default function (CONFIG) {
+  if (!initialized) {
+    initialize(CONFIG);
+  }
+  return app;
 }
