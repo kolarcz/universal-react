@@ -58,7 +58,6 @@
     "react-router-redux": "4.0.2",
     "redux": "3.4.0",
     "redux-async-connect": "1.0.0-rc4",
-    "redux-logger": "2.6.1",
     "sass-loader": "3.2.0",
     "script-loader": "0.6.1",
     "spdy": "3.2.3",
@@ -78,6 +77,7 @@
     "eslint-plugin-jsx-a11y": "0.6.2",
     "eslint-plugin-react": "4.3.0",
     "redux-devtools": "3.2.0",
+    "redux-logger": "2.6.1",
     "webpack-dev-middleware": "1.6.1",
     "webpack-hot-middleware": "2.10.0"
   }

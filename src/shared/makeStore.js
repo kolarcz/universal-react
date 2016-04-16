@@ -1,6 +1,4 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import createLogger from 'redux-logger';
-import { persistState } from 'redux-devtools';
 
 import apiClientMiddleware from './apiClientMiddleware';
 import reducer from './modules';
@@ -9,6 +7,9 @@ function makeStore(apiClient, initialState) {
   let composed;
 
   if (__DEV__) {
+    const createLogger = require('redux-logger').default;
+    const persistState = require('redux-devtools').persistState;
+
     composed = compose(
       applyMiddleware(...[
         apiClientMiddleware(apiClient)
