@@ -1,6 +1,6 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-const webpack = require('webpack');
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import WebpackIsomorphicToolsPlugin from 'webpack-isomorphic-tools/plugin';
+import webpack from 'webpack';
 
 const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./assets'))
   .development(__DEV__);
