@@ -23,7 +23,10 @@ class Layout extends Component {
 
     return (
       <div>
-        <Helmet link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]} />
+        <Helmet
+          link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
+          titleTemplate="%s | Universal React"
+        />
 
         <header className="navbar navbar-default navbar-fixed-top" id="top" role="banner">
           <div className="container">
