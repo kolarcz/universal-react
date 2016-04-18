@@ -5,38 +5,19 @@ import compress from 'compression';
 import bodyParser from 'body-parser';
 import spdy from 'spdy';
 import fs from 'fs';
-import { defaultsDeep } from 'lodash';
 
-const CONFIG = defaultsDeep({
-  sessionSecret: process.env.SESSION_SECRET,
-  ports: {
-    plain: process.env.PORT,
-    secure: process.env.PORT_SECURE
-  },
-  social: {
-    facebook: {
-      clientId: process.env.SOCIAL_FACEBOOK_ID,
-      clientSecret: process.env.SOCIAL_FACEBOOK_SECRET,
-      callbackUrl: process.env.SOCIAL_FACEBOOK_URL
-    },
-    google: {
-      clientId: process.env.SOCIAL_GOOGLE_ID,
-      clientSecret: process.env.SOCIAL_GOOGLE_SECRET,
-      callbackUrl: process.env.SOCIAL_GOOGLE_URL
-    }
-  }
-}, require('../../config'));
+const CONFIG = process.env;
 
 const app = express();
 
-if (CONFIG.ports.plain && CONFIG.ports.secure) {
-  app.set('forceSSLOptions', { httpsPort: CONFIG.ports.secure });
+if (CONFIG.PORT && CONFIG.PORT_SECURE) {
+  app.set('forceSSLOptions', { httpsPort: CONFIG.PORT_SECURE });
   app.use(forceSSL);
 }
 
 app.use(compress());
 app.use(session({
-  secret: CONFIG.sessionSecret,
+  secret: CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   name: 'sid'
@@ -62,21 +43,20 @@ if (__DEV__) {
 
 app.use('/', express.static(`${__dirname}/../../dist`));
 
-if (CONFIG.ports.secure) {
+if (CONFIG.PORT_SECURE) {
   spdy.createServer({
-    key: fs.readFileSync(`${__dirname}/../../${CONFIG.certs.key}`),
-    cert: fs.readFileSync(`${__dirname}/../../${CONFIG.certs.cert}`)
-  }, app).listen(CONFIG.ports.secure, (err) => {
-    console.log(`HTTPS at port ${CONFIG.ports.secure}:`, err || 'started');
+    key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
+    cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
+  }, app).listen(CONFIG.PORT_SECURE, (err) => {
+    console.log(`HTTPS at port ${CONFIG.PORT_SECURE}:`, err || 'started');
   });
 }
 
-if (CONFIG.ports.plain) {
-  app.listen(CONFIG.ports.plain, (err) => {
-    console.log(`HTTP at port ${CONFIG.ports.plain}:`, err || 'started');
+if (CONFIG.PORT) {
+  app.listen(CONFIG.PORT, (err) => {
+    console.log(`HTTP at port ${CONFIG.PORT}:`, err || 'started');
   });
 }
-
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../../webpack/assets'));

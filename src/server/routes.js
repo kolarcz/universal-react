@@ -57,11 +57,11 @@ function initialize(CONFIG) {
   }));
 
 
-  if (CONFIG.social.facebook.clientId) {
+  if (CONFIG.SOCIAL_FACEBOOK_ID) {
     passport.use(new FacebookStrategy({
-      clientID: CONFIG.social.facebook.clientId,
-      clientSecret: CONFIG.social.facebook.clientSecret,
-      callbackURL: CONFIG.social.facebook.callbackUrl
+      clientID: CONFIG.SOCIAL_FACEBOOK_ID,
+      clientSecret: CONFIG.SOCIAL_FACEBOOK_SECRET,
+      callbackURL: CONFIG.SOCIAL_FACEBOOK_CALLBACK
     }, (token, refreshToken, profile, done) => {
       for (let i = 0; i < users.length; i++) {
         if (users[i].social === 'facebook' && users[i].socialId === profile.id) {
@@ -85,11 +85,11 @@ function initialize(CONFIG) {
     }));
   }
 
-  if (CONFIG.social.google.clientId) {
+  if (CONFIG.SOCIAL_GOOGLE_ID) {
     passport.use('google', new GoogleStrategy({
-      clientID: CONFIG.social.google.clientId,
-      clientSecret: CONFIG.social.google.clientSecret,
-      callbackURL: CONFIG.social.google.callbackUrl
+      clientID: CONFIG.SOCIAL_GOOGLE_ID,
+      clientSecret: CONFIG.SOCIAL_GOOGLE_SECRET,
+      callbackURL: CONFIG.SOCIAL_GOOGLE_CALLBACK
     }, (token, refreshToken, profile, done) => {
       for (let i = 0; i < users.length; i++) {
         if (users[i].social === 'google' && users[i].socialId === profile.id) {

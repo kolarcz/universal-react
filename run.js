@@ -1,4 +1,5 @@
 require('babel-register');
+require('dotenv').config();
 
 const yargs = require('yargs');
 const argv = yargs.default('env', 'production').argv;
