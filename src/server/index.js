@@ -9,6 +9,7 @@ import fs from 'fs';
 const CONFIG = process.env;
 
 const app = express();
+app.disable('x-powered-by');
 
 if (CONFIG.PORT && CONFIG.PORT_SECURE) {
   app.set('forceSSLOptions', { httpsPort: CONFIG.PORT_SECURE });
