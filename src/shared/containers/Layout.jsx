@@ -28,7 +28,7 @@ class Layout extends Component {
           titleTemplate="%s | Universal React"
         />
 
-        <header className="navbar navbar-default navbar-fixed-top" id="top" role="banner">
+        <header className="navbar navbar-default navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">
               <button
@@ -42,7 +42,7 @@ class Layout extends Component {
                 <span className="icon-bar"></span>
               </button>
               <span className="navbar-brand">
-                <span className="glyphicon glyphicon-leaf"></span> Universal React
+                <i className="fa fa-cube fa-lg" /> Universal React
               </span>
             </div>
             <nav id="bs-navbar" className="collapse navbar-collapse">
@@ -54,10 +54,14 @@ class Layout extends Component {
               <ul className="nav navbar-nav navbar-right">
                 { user.name ? (
                   <li>
-                    <a href="/logout">Logout</a>
+                    <a href="/logout">
+                      <i className="fa fa-sign-out fa-lg" /> Logout
+                    </a>
                   </li>
                 ) : (
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">
+                    <i className="fa fa-sign-in fa-lg" /> Login
+                  </Link>
                 )}
               </ul>
               { user.name ? (
