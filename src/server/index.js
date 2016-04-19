@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 if (__DEV__) {
   const webpack = require('webpack');
-  const webpackConfig = require('../../webpack/config');
+  const webpackConfig = require('../../webpack/makeConfig')(__ENV__);
   const compiler = webpack(webpackConfig);
 
   app.use(require('webpack-dev-middleware')(compiler, {
@@ -60,7 +60,7 @@ if (CONFIG.PORT) {
 }
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
-global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../../webpack/assets'));
+global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../../webpack/makeAssets')(__ENV__));
 
 global.webpackIsomorphicTools
   .development(__DEV__)

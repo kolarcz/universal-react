@@ -11,7 +11,7 @@ import makeRoutes from '../shared/makeRoutes';
 import makeStore from '../shared/makeStore';
 import makeHistory from '../shared/makeHistory';
 
-// var webpackConfig = require('../../webpack/config');
+// var webpackConfig = require('../../webpack/makeConfig')(__ENV__);
 
 export default function (req, res) {
   if (__DEV__) {
