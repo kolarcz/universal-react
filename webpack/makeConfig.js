@@ -4,7 +4,8 @@ import webpack from 'webpack';
 
 module.exports = (ENV) => {
   const isDEV = (ENV === 'development');
-  const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./makeAssets')(ENV))
+  const webpackIsomorphicToolsPlugin
+    = new WebpackIsomorphicToolsPlugin(require('./makeAssets')(ENV))
     .development(isDEV);
 
   return {

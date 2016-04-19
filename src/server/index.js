@@ -60,7 +60,9 @@ if (CONFIG.PORT) {
 }
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
-global.webpackIsomorphicTools = new WebpackIsomorphicTools(require('../../webpack/makeAssets')(__ENV__));
+global.webpackIsomorphicTools = new WebpackIsomorphicTools(
+  require('../../webpack/makeAssets')(__ENV__)
+);
 
 global.webpackIsomorphicTools
   .development(__DEV__)

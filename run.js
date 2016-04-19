@@ -4,7 +4,7 @@ require('dotenv').config();
 const program = require('commander');
 program
   .option('-b, --build', 'build production files')
-  .option('-s, --server <env>', 'run server with selected environment', /^(development|production)$/, null)
+  .option('-s, --server <env>', 'run server with selected env', /^(development|production)$/, null)
   .parse(process.argv);
 
 if (program.build) {
