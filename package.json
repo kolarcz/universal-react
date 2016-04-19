@@ -2,7 +2,7 @@
   "name": "universal-react",
   "version": "1.0.0",
   "description": "Universal React",
-  "main": "index.js",
+  "main": "run.js",
   "scripts": {
     "postinstall": "npm run build",
     "gencerts": "openssl req -x509 -newkey rsa:2048 -keyout ./certs/server.key -out ./certs/server.crt -days 36525 -subj \"/O=-\" -nodes",
