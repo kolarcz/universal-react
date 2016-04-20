@@ -20,6 +20,10 @@ if (__CLIENT__) {
 class Layout extends Component {
   render() {
     const { user } = this.props;
+    const addLinkProps = {
+      'data-toggle': 'collapse',
+      'data-target': '.navbar-collapse.in'
+    };
 
     return (
       <div>
@@ -47,9 +51,9 @@ class Layout extends Component {
             </div>
             <nav id="bs-navbar" className="collapse navbar-collapse">
               <ul className="nav navbar-nav">
-                <Link to="/" onlyActiveOnIndex>Home</Link>
-                <Link to="/counter">Counter</Link>
-                <Link to="/todos">Todos</Link>
+                <Link {...addLinkProps} to="/" onlyActiveOnIndex>Home</Link>
+                <Link {...addLinkProps} to="/counter">Counter</Link>
+                <Link {...addLinkProps} to="/todos">Todos</Link>
               </ul>
               <ul className="nav navbar-nav navbar-right">
                 { user.name ? (
@@ -59,7 +63,7 @@ class Layout extends Component {
                     </a>
                   </li>
                 ) : (
-                  <Link to="/login">
+                  <Link {...addLinkProps} to="/login">
                     <i className="fa fa-sign-in fa-lg" /> Login
                   </Link>
                 )}
