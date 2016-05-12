@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
@@ -6,63 +6,65 @@ import { addTodo, markTodo, deleteTodo } from '../modules/todos';
 
 import Todo from './Todo';
 
-class Todos extends Component {
-  constructor(props) {
-    super(props);
-    this.addTodo = this.addTodo.bind(this);
-  }
-
-  addTodo(e) {
+const Todos = ({ todos, addTodo, markTodo, deleteTodo }) => {
+  const addTodoEvent = (e) => {
     e.preventDefault();
 
-    const textElem = this.refs.text;
+    const textElem = e.target.text;
     textElem.focus();
+
     if (textElem.value.length) {
-      this.props.addTodo(textElem.value);
+      addTodo(textElem.value);
       textElem.value = '';
     }
-  }
+  };
 
-  render() {
-    const { todos, markTodo, deleteTodo } = this.props;
-    return (
-      <div>
-        <Helmet title="Todo" />
-        <h1>Todos</h1>
+  const markTodoEvent = (index) => {
+    markTodo(index);
+  };
 
-        <form className="form-horizontal" onSubmit={ this.addTodo }>
-          <div className="form-group">
-            <div className="col-sm-6">
-              <div className="input-group">
-                <input ref="text" className="form-control" />
-                <span className="input-group-btn">
-                  <button className="btn btn-primary" type="submit">
-                    <span className="glyphicon glyphicon-plus"></span> Add todo
-                  </button>
-                </span>
-              </div>
+  const deleteTodoEvent = (index, e) => {
+    e.preventDefault();
+    deleteTodo(index);
+  };
+
+  return (
+    <div>
+      <Helmet title="Todo" />
+      <h1>Todos</h1>
+
+      <form className="form-horizontal" onSubmit={addTodoEvent}>
+        <div className="form-group">
+          <div className="col-sm-6">
+            <div className="input-group">
+              <input name="text" className="form-control" />
+              <span className="input-group-btn">
+                <button className="btn btn-primary" type="submit">
+                  <span className="glyphicon glyphicon-plus"></span> Add todo
+                </button>
+              </span>
             </div>
           </div>
-          <div className="form-group">
-            <div className="col-sm-6">
-              <ul className="list-group">
-                {todos.map((todo, index) => (
-                  <Todo
-                    key={index}
-                    index={index}
-                    todo={todo}
-                    markTodo={markTodo}
-                    deleteTodo={deleteTodo}
-                  />
-                ))}
-              </ul>
-            </div>
+        </div>
+        <div className="form-group">
+          <div className="col-sm-6">
+            <ul className="list-group">
+              {todos.map((todo, index) => (
+                <Todo
+                  key={index}
+                  text={todo.text}
+                  done={todo.done}
+                  markTodo={() => markTodoEvent(index)}
+                  deleteTodo={(e) => deleteTodoEvent(index, e)}
+                />
+              ))}
+            </ul>
           </div>
-        </form>
-      </div>
-    );
-  }
-}
+        </div>
+      </form>
+    </div>
+  );
+};
 
 Todos.propTypes = {
   todos: PropTypes.array.isRequired,

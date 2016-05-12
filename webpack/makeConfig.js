@@ -10,7 +10,7 @@ module.exports = (ENV) => {
 
   return {
     devtool: isDEV ? 'cheap-module-eval-source-map' : null,
-    entry: (isDEV ? ['webpack-hot-middleware/client'] : [])
+    entry: (isDEV ? ['webpack-hot-middleware/client', 'react-hot-loader/patch'] : [])
       .concat([
         `${__dirname}/../src/client/index.js`
       ]),
@@ -43,8 +43,9 @@ module.exports = (ENV) => {
       loaders: [{
         test: /\.jsx?$/,
         loader: `babel-loader?${JSON.stringify({
-          presets: ['react', 'es2015'].concat(isDEV ? 'react-hmre' : []),
+          presets: ['react', 'es2015'],
           plugins: ['add-module-exports', 'transform-object-rest-spread']
+            .concat(isDEV ? 'react-hot-loader/babel' : [])
         })}${isDEV ? '!eslint-loader' : ''}`,
         exclude: /node_modules/
       }, {
@@ -59,7 +60,7 @@ module.exports = (ENV) => {
           : ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
       }, {
         test: /\.(eot|ttf|woff2?)(\?.*)?$/,
-        loader: 'url-loader?name=[hash:base64:6].[ext]&limit=50000'
+        loader: 'url-loader?name=[hash:base64:6].[ext]&limit=1'
       }, {
         test: /\.(gif|jpe?g|png|svg)(\?.*)?$/,
         loader: 'url-loader?name=[hash:base64:6].[ext]&limit=10000'

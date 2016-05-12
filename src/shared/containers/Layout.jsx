@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import activeComponent from 'react-router-active-component';
 import { asyncConnect } from 'redux-async-connect';
@@ -17,89 +17,75 @@ if (__CLIENT__) {
   require('script!bootstrap/dist/js/bootstrap.min.js');
 }
 
-class Layout extends Component {
-  render() {
-    const { user } = this.props;
-    const addLinkProps = {
-      'data-toggle': 'collapse',
-      'data-target': '.navbar-collapse.in'
-    };
+const Layout = ({ children, user }) => {
+  const addLinkProps = {
+    'data-toggle': 'collapse',
+    'data-target': '.navbar-collapse.in'
+  };
 
-    return (
-      <div>
-        <Helmet
-          link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
-          titleTemplate="%s | Universal React"
-        />
+  return (
+    <div>
+      <Helmet
+        link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
+        titleTemplate="%s | Universal React"
+      />
 
-        <header className="navbar navbar-default navbar-fixed-top">
-          <div className="container">
-            <div className="navbar-header">
-              <button
-                className="navbar-toggle collapsed"
-                type="button"
-                data-toggle="collapse"
-                data-target="#bs-navbar"
-              >
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-              <span className="navbar-brand">
-                <i className="fa fa-cube fa-lg" /> Universal React
-              </span>
-            </div>
-            <nav id="bs-navbar" className="collapse navbar-collapse">
-              <ul className="nav navbar-nav">
-                <Link {...addLinkProps} to="/" onlyActiveOnIndex>Home</Link>
-                <Link {...addLinkProps} to="/counter">Counter</Link>
-                <Link {...addLinkProps} to="/todos">Todos</Link>
-              </ul>
-              <ul className="nav navbar-nav navbar-right">
-                { user.name ? (
-                  <li>
-                    <a href="/logout">
-                      <i className="fa fa-sign-out fa-lg" /> Logout
-                    </a>
-                  </li>
-                ) : (
-                  <Link {...addLinkProps} to="/login">
-                    <i className="fa fa-sign-in fa-lg" /> Login
-                  </Link>
-                )}
-              </ul>
-              { user.name ? (
-                <p className="navbar-text navbar-right" style={{ marginRight: '20px' }}>
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '50%',
-                      margin: '-13px 12px -13px 0px',
-                      background: `url('${user.photo}') #ddd`,
-                      backgroundSize: '100%'
-                    }}
-                  />
-                  Signed in as <strong>{user.name}</strong>
-                </p>
-              ) : null }
-            </nav>
-          </div>
-        </header>
-
+      <header className="navbar navbar-default navbar-fixed-top">
         <div className="container">
-          {this.props.children}
+          <div className="navbar-header">
+            <button
+              className="navbar-toggle collapsed"
+              type="button"
+              data-toggle="collapse"
+              data-target="#bs-navbar"
+            >
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+            <span className="navbar-brand">
+              <i className="fa fa-cube fa-lg" /> Universal React
+            </span>
+          </div>
+          <nav id="bs-navbar" className="collapse navbar-collapse">
+            <ul className="nav navbar-nav">
+              <Link {...addLinkProps} to="/" onlyActiveOnIndex>Home</Link>
+              <Link {...addLinkProps} to="/counter">Counter</Link>
+              <Link {...addLinkProps} to="/todos">Todos</Link>
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+              {user.name ? (
+                <li>
+                  <a href="/logout">
+                    <i className="fa fa-sign-out fa-lg" /> Logout
+                  </a>
+                </li>
+              ) : (
+                <Link {...addLinkProps} to="/login">
+                  <i className="fa fa-sign-in fa-lg" /> Login
+                </Link>
+              )}
+            </ul>
+            {user.name ? (
+              <p className="navbar-text navbar-right">
+                <span className="photo-icon" style={{ background: `url('${user.photo}') #ddd` }} />
+                Signed in as <strong>{user.name}</strong>
+              </p>
+            ) : null}
+          </nav>
         </div>
+      </header>
+
+      <div className="container">
+        {children}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
-  user: PropTypes.any,
-  store: PropTypes.any
+  user: PropTypes.any
 };
 
 export default asyncConnect([{
