@@ -68,7 +68,7 @@ const Layout = ({ children, user }) => {
             </ul>
             {user.name ? (
               <p className="navbar-text navbar-right">
-                <span className="photo-icon" style={{ background: `url('${user.photo}') #ddd` }} />
+                <span className="photo-icon" style={{ backgroundImage: `url('${user.photo}')` }} />
                 Signed in as <strong>{user.name}</strong>
               </p>
             ) : null}
