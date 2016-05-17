@@ -1,17 +1,17 @@
-const ADD_TODO = 'universal-react/todos/ADD_TODO';
-const MARK_TODO = 'universal-react/todos/MARK_TODO';
-const DELETE_TODO = 'universal-react/todos/DELETE_TODO';
+const ADD = 'universal-react/todos/ADD';
+const MARK = 'universal-react/todos/MARK';
+const DELETE = 'universal-react/todos/DELETE';
 
 
 export default function (state = [], action) {
   switch (action.type) {
-    case ADD_TODO:
+    case ADD:
       return [...state, {
         text: action.text,
         done: false
       }];
 
-    case MARK_TODO:
+    case MARK:
       return state.map((todo, index) => {
         if (index === action.i) {
           return { ...todo, done: !todo.done };
@@ -19,7 +19,7 @@ export default function (state = [], action) {
         return todo;
       });
 
-    case DELETE_TODO:
+    case DELETE:
       return state.filter((todo, index) => (index !== action.i));
 
     default:
@@ -28,23 +28,23 @@ export default function (state = [], action) {
 }
 
 
-export function addTodo(text) {
+export function add(text) {
   return {
-    type: ADD_TODO,
+    type: ADD,
     text
   };
 }
 
-export function markTodo(i) {
+export function mark(i) {
   return {
-    type: MARK_TODO,
+    type: MARK,
     i
   };
 }
 
-export function deleteTodo(i) {
+export function del(i) {
   return {
-    type: DELETE_TODO,
+    type: DELETE,
     i
   };
 }

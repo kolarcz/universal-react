@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import { addTodo, markTodo, deleteTodo } from '../modules/todos';
+import { add as addTodo, mark as markTodo, del as deleteTodo } from '../modules/todos';
 
 import Todo from './Todo';
 
