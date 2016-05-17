@@ -1,9 +1,9 @@
 export default function apiClientMiddleware(apiClient) {
-  return ({ dispatch, getState }) => (next) => (action) => {
+  return (/* { dispatch, getState } */) => (next) => (action) => {
     // redux-thunk
-    if (typeof action === 'function') {
+    /* if (typeof action === 'function') {
       return action(dispatch, getState);
-    }
+    } */
 
     const { promise, types, ...rest } = action;
     if (!promise) {

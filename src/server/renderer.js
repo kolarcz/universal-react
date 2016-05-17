@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 import React from 'react';
-import { ReduxAsyncConnect, loadOnServer } from 'redux-async-connect';
+import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 // import fs from 'fs';
 
 import ApiClient from '../shared/apiClient';

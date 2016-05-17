@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import activeComponent from 'react-router-active-component';
-import { asyncConnect } from 'redux-async-connect';
+import { asyncConnect } from 'redux-connect';
+import { connect } from 'react-redux';
 
-import { isLoaded as isUserLoaded } from '../modules/user';
+import { isLoaded as isUserLoaded, load as loadUser } from '../modules/user';
 
 const Link = activeComponent('li');
 
@@ -89,8 +90,15 @@ Layout.propTypes = {
 };
 
 export default asyncConnect([{
-  key: 'user',
-  promise: ({ store: { getState }, helpers: { apiClient } }) => (
-    isUserLoaded(getState()) ? getState().reduxAsyncConnect.user : apiClient.get('/userInfo')
-  )
-}])(Layout);
+  promise: ({ store: { getState, dispatch } }) => {
+    const promises = [];
+
+    if (!isUserLoaded(getState())) {
+      promises.push(dispatch(loadUser()));
+    }
+
+    return Promise.all(promises);
+  }
+}])(connect(state => ({
+  user: state.user
+}), {})(Layout));

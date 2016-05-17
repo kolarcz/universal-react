@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
-import { ReduxAsyncConnect } from 'redux-async-connect';
+import { ReduxAsyncConnect } from 'redux-connect';
 
 import makeRoutes from '../shared/makeRoutes';
 
