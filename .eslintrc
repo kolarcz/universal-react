@@ -4,10 +4,11 @@
   "extends" : ["airbnb"],
   "rules": {
     "comma-dangle": 0,
-    "no-console": 0,
-    "no-shadow": 0,
     "global-require": 0,
     "import/no-unresolved": 0,
+    "no-console": 0,
+    "no-shadow": 0,
+    "no-underscore-dangle": 0,
     "react/prefer-stateless-function": 0,
     "react/jsx-no-bind": 0
   },
