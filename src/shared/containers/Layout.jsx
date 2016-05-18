@@ -4,7 +4,10 @@ import activeComponent from 'react-router-active-component';
 import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
 
-import { isLoaded as isUserLoaded, load as loadUser } from '../modules/user';
+import { set as setUser } from '../modules/user';
+import { add as addFlash } from '../modules/flash';
+
+import Flashes from './Flashes';
 
 const Link = activeComponent('li');
 
@@ -18,7 +21,7 @@ if (__CLIENT__) {
   require('script!bootstrap/dist/js/bootstrap.min.js');
 }
 
-const Layout = ({ children, user }) => {
+const Layout = ({ children, user, flash }) => {
   const addLinkProps = {
     'data-toggle': 'collapse',
     'data-target': '.navbar-collapse.in'
@@ -77,6 +80,8 @@ const Layout = ({ children, user }) => {
         </div>
       </header>
 
+      <Flashes flashes={flash} />
+
       <div className="container">
         {children}
       </div>
@@ -86,19 +91,30 @@ const Layout = ({ children, user }) => {
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
-  user: PropTypes.any
+  user: PropTypes.object.isRequired,
+  flash: PropTypes.array.isRequired
 };
 
 export default asyncConnect([{
-  promise: ({ store: { getState, dispatch } }) => {
+  promise: ({ store: { dispatch }, helpers: { apiClient } }) => {
     const promises = [];
 
-    if (!isUserLoaded(getState())) {
-      promises.push(dispatch(loadUser()));
+    if (!__CLIENT__) {
+      const req = apiClient.getServerReq();
+      const flashes = req.flash();
+
+      promises.push(dispatch(setUser(req.user || {})));
+
+      Object.keys(flashes).forEach((type) => {
+        flashes[type].forEach((message) => {
+          promises.push(dispatch(addFlash(type, message)));
+        });
+      });
     }
 
     return Promise.all(promises);
   }
 }])(connect(state => ({
-  user: state.user
+  user: state.user,
+  flash: state.flash
 }), {})(Layout));

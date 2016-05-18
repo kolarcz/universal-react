@@ -31,6 +31,10 @@ class ApiClient {
         request.end((err, { body } = {}) => (err ? reject(body || err) : resolve(body)));
       })
     ));
+
+    if (!__CLIENT__) {
+      this.getServerReq = () => req;
+    }
   }
 }
 

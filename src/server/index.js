@@ -1,6 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import forceSSL from 'express-force-ssl';
+import connectFlash from 'connect-flash';
 import compress from 'compression';
 import bodyParser from 'body-parser';
 import spdy from 'spdy';
@@ -23,6 +24,7 @@ app.use(session({
   saveUninitialized: true,
   name: 'sid'
 }));
+app.use(connectFlash());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

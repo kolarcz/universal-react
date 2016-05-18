@@ -34,7 +34,9 @@ function initialize(CONFIG) {
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    successFlash: 'Logged in',
+    failureRedirect: '/login',
+    failureFlash: 'Username already exists'
   }));
 
 
@@ -53,7 +55,9 @@ function initialize(CONFIG) {
 
   app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/',
-    failureRedirect: '/login'
+    successFlash: 'Logged in',
+    failureRedirect: '/login',
+    failureFlash: 'Wrong username or password'
   }));
 
 
@@ -81,7 +85,9 @@ function initialize(CONFIG) {
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
       successRedirect: '/',
-      failureRedirect: '/login'
+      successFlash: 'Logged in',
+      failureRedirect: '/login',
+      failureFlash: 'Something wrong with login via Facebook'
     }));
   }
 
@@ -110,18 +116,17 @@ function initialize(CONFIG) {
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
     app.get('/auth/google/callback', passport.authenticate('google', {
       successRedirect: '/',
-      failureRedirect: '/login'
+      successFlash: 'Logged in',
+      failureRedirect: '/login',
+      failureFlash: 'Something wrong with login via Google'
     }));
   }
 
 
   app.get('/logout', (req, res) => {
     req.logout();
+    req.flash('success', 'Logged out');
     res.redirect('/');
-  });
-
-  app.get('/userInfo', (req, res) => {
-    res.json(req.user || {});
   });
 
 

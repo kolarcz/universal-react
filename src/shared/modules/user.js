@@ -1,25 +1,10 @@
-const LOAD = 'universal-react/user/LOAD';
-const LOAD_SUCCESS = 'universal-react/user/LOAD_SUCCESS';
-const LOAD_FAIL = 'universal-react/user/LOAD_FAIL';
+const SET = 'universal-react/user/SET';
 
 
-export default function (state = { loaded: false }, action) {
+export default function (state = {}, action) {
   switch (action.type) {
-    case LOAD:
-      return {
-        loaded: false
-      };
-
-    case LOAD_SUCCESS:
-      return {
-        ...action.result,
-        loaded: true
-      };
-
-    case LOAD_FAIL:
-      return {
-        loaded: false
-      };
+    case SET:
+      return { ...action.data };
 
     default:
       return state;
@@ -27,14 +12,9 @@ export default function (state = { loaded: false }, action) {
 }
 
 
-export function load() {
+export function set(data) {
   return {
-    types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: ({ apiClient }) => apiClient.get('/userInfo')
+    type: SET,
+    data
   };
-}
-
-
-export function isLoaded(globalState) {
-  return globalState.user.loaded;
 }
