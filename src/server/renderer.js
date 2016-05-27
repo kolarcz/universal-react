@@ -58,7 +58,7 @@ export default function (req, res) {
 
       const stringifiedState = JSON.stringify(store.getState());
       const content = `<!DOCTYPE html>${ReactDOMServer.renderToString(
-        <html>
+        <html {...helmet.htmlAttributes.toComponent()}>
           <head>
             <meta charSet="utf8" />
             <meta

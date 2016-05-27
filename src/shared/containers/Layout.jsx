@@ -30,6 +30,7 @@ const Layout = ({ children, user, flash }) => {
   return (
     <div>
       <Helmet
+        htmlAttributes={{ lang: 'en' }}
         link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
         titleTemplate="%s | Universal React"
       />
