@@ -1,3 +1,22 @@
+@-webkit-keyframes alert-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes alert-hide {
+  from {
+    opacity: 1;
+    margin-top: 0px;
+  }
+  to {
+    opacity: 0;
+    margin-top: -52px;
+  }
+}
+
 body {
   .flashes {
     position: fixed;
@@ -5,5 +24,14 @@ body {
     left: 0px;
     right: 0px;
     z-index: 1000;
+
+    .alert {
+      margin-bottom: 10px;
+      -webkit-animation: alert-show .5s;
+
+      &.alert-leave {
+        -webkit-animation: alert-hide .5s;
+      }
+    }
   }
 }

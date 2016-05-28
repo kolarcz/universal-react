@@ -5,7 +5,7 @@ import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
 
 import { set as setUser } from '../modules/user';
-import { add as addFlash } from '../modules/flash';
+import { add as addFlash } from '../modules/flashes';
 
 import Flashes from './Flashes';
 
@@ -21,7 +21,7 @@ if (__CLIENT__) {
   require('script!bootstrap/dist/js/bootstrap.min.js');
 }
 
-const Layout = ({ children, user, flash }) => {
+const Layout = ({ children, user }) => {
   const addLinkProps = {
     'data-toggle': 'collapse',
     'data-target': '.navbar-collapse.in'
@@ -81,7 +81,7 @@ const Layout = ({ children, user, flash }) => {
         </div>
       </header>
 
-      <Flashes flashes={flash} />
+      <Flashes />
 
       <div className="container">
         {children}
@@ -92,8 +92,7 @@ const Layout = ({ children, user, flash }) => {
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  flash: PropTypes.array.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default asyncConnect([{
@@ -116,6 +115,5 @@ export default asyncConnect([{
     return Promise.all(promises);
   }
 }])(connect(state => ({
-  user: state.user,
-  flash: state.flash
+  user: state.user
 }), {})(Layout));

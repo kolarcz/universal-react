@@ -1,4 +1,5 @@
-const ADD = 'universal-react/flash/ADD';
+const ADD = 'universal-react/flashes/ADD';
+const DELETE = 'universal-react/flashes/DELETE';
 
 
 export default function (state = [], action) {
@@ -8,6 +9,9 @@ export default function (state = [], action) {
         type: action.data.type,
         message: action.data.message
       }];
+
+    case DELETE:
+      return [...state.slice(0, action.i), null, ...state.slice(action.i + 1)];
 
     default:
       return state;
@@ -22,5 +26,12 @@ export function add(type, message) {
       type,
       message
     }
+  };
+}
+
+export function del(i) {
+  return {
+    type: DELETE,
+    i
   };
 }

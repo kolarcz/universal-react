@@ -5,7 +5,7 @@ import { reducer as reduxAsyncConnect } from 'redux-connect';
 import counter from './counter';
 import todos from './todos';
 import user from './user';
-import flash from './flash';
+import flashes from './flashes';
 
 export default combineReducers({
   router,
@@ -13,5 +13,5 @@ export default combineReducers({
   counter,
   todos,
   user,
-  flash
+  flashes
 });
