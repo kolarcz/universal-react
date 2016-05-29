@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-const Home = () => (
+import { add as addFlash } from '../modules/flashes';
+
+const Home = ({ addFlash }) => (
   <div>
     <Helmet title="Home" />
     <h1>Home</h1>
+    <button className="btn btn-success" onClick={() => addFlash('success', 'Success example')}>
+      Show success flash
+    </button>
+    {' '}
+    <button className="btn btn-danger" onClick={() => addFlash('error', 'Error example')}>
+      Show error flash
+    </button>
   </div>
 );
 
-export default Home;
+Home.propTypes = {
+  addFlash: PropTypes.func.isRequired
+};
+
+export default connect(null, { addFlash })(Home);
