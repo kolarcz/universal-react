@@ -25,12 +25,23 @@ body {
     right: 0px;
     z-index: 1000;
 
-    .alert {
-      margin-bottom: 10px;
-      -webkit-animation: alert-show .5s;
+    .row {
+      position: relative;
 
-      &.alert-leave {
-        -webkit-animation: alert-hide .5s;
+      .col-sm-5 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+
+        .alert {
+          margin-bottom: 10px;
+          -webkit-animation: alert-show .5s;
+
+          &.alert-leave {
+            -webkit-animation: alert-hide .5s;
+          }
+        }
       }
     }
   }
