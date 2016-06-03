@@ -4,14 +4,16 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
+import Users from './users.class.js';
+const users = new Users();
+
 const app = express.Router(); // eslint-disable-line new-cap
 
-const users = [];
 let initialized = false;
 
 function initialize(CONFIG) {
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((id, done) => done(null, users[id] || false));
+  passport.deserializeUser((id, done) => done(null, users.getUserById(id) || false));
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -21,16 +23,9 @@ function initialize(CONFIG) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) => {
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].username === username || !password.length) {
-        return done(null, false);
-      }
-    }
-    const newUser = { username, password, name: username };
-    users.push(newUser);
-    return done(null, { ...newUser, id: users.length - 1 });
-  }));
+  }, (req, username, password, done) =>
+    done(null, users.setLocalUser(username, password))
+  ));
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/',
@@ -44,14 +39,9 @@ function initialize(CONFIG) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) => {
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].username === username && users[i].password === password) {
-        return done(null, { ...users[i], id: i });
-      }
-    }
-    return done(null, false);
-  }));
+  }, (req, username, password, done) =>
+    done(null, users.getUserByLocal(username, password))
+  ));
 
   app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/',
@@ -66,21 +56,16 @@ function initialize(CONFIG) {
       clientID: CONFIG.SOCIAL_FACEBOOK_ID,
       clientSecret: CONFIG.SOCIAL_FACEBOOK_SECRET,
       callbackURL: CONFIG.SOCIAL_FACEBOOK_CALLBACK
-    }, (token, refreshToken, profile, done) => {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].social === 'facebook' && users[i].socialId === profile.id) {
-          return done(null, { ...users[i], id: i });
-        }
-      }
-      const newUser = {
-        social: 'facebook',
-        socialId: profile.id,
-        name: profile.displayName,
-        photo: `https://graph.facebook.com/${profile.id}/picture`
-      };
-      users.push(newUser);
-      return done(null, { ...newUser, id: users.length - 1 });
-    }));
+    }, (token, refreshToken, profile, done) =>
+      done(
+        null,
+        users.getUserBySocial('facebook', profile.id) ||
+        users.setSocialUser('facebook', profile.id,
+          profile.displayName,
+          `https://graph.facebook.com/${profile.id}/picture`
+        )
+      )
+    ));
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
@@ -96,22 +81,16 @@ function initialize(CONFIG) {
       clientID: CONFIG.SOCIAL_GOOGLE_ID,
       clientSecret: CONFIG.SOCIAL_GOOGLE_SECRET,
       callbackURL: CONFIG.SOCIAL_GOOGLE_CALLBACK
-    }, (token, refreshToken, profile, done) => {
-      for (let i = 0; i < users.length; i++) {
-        if (users[i].social === 'google' && users[i].socialId === profile.id) {
-          return done(null, { ...users[i], id: i });
-        }
-      }
-      const newUser = {
-        social: 'google',
-        socialId: profile.id,
-        name: profile.displayName,
-        email: profile.emails[0].value,
-        photo: profile.photos[0].value
-      };
-      users.push(newUser);
-      return done(null, { ...newUser, id: users.length - 1 });
-    }));
+    }, (token, refreshToken, profile, done) =>
+      done(
+        null,
+        users.getUserBySocial('google', profile.id) ||
+        users.setSocialUser('google', profile.id,
+          profile.displayName,
+          profile.photos[0].value
+        )
+      )
+    ));
 
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
     app.get('/auth/google/callback', passport.authenticate('google', {
