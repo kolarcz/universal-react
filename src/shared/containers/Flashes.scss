@@ -36,10 +36,10 @@ body {
 
         .alert {
           margin-bottom: 10px;
-          -webkit-animation: alert-show .5s;
+          -webkit-animation: alert-show .5s forwards;
 
           &.alert-leave {
-            -webkit-animation: alert-hide .5s;
+            -webkit-animation: alert-hide .5s forwards;
           }
         }
       }
