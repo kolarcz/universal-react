@@ -51,6 +51,7 @@
     "passport-facebook": "2.1.1",
     "passport-google-oauth": "1.0.0",
     "passport-local": "1.0.0",
+    "progress-bar-webpack-plugin": "1.8.0",
     "react": "15.1.0",
     "react-addons-css-transition-group": "^15.1.0",
     "react-dom": "15.1.0",

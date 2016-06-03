@@ -11,9 +11,7 @@ if (program.build) {
   const webpack = require('webpack');
   const webpackConfig = require('./webpack/makeConfig')('production');
 
-  webpack(webpackConfig, (err) => {
-    console.log('Build:', err || 'done');
-  });
+  webpack(webpackConfig, () => {});
 }
 
 if (program.server) {

@@ -12,6 +12,23 @@ const CONFIG = process.env;
 const app = express();
 app.disable('x-powered-by');
 
+const listen = () => {
+  if (CONFIG.PORT_SECURE) {
+    spdy.createServer({
+      key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
+      cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
+    }, app).listen(CONFIG.PORT_SECURE, (err) => {
+      console.log(`HTTPS at port ${CONFIG.PORT_SECURE}:`, err || 'started');
+    });
+  }
+
+  if (CONFIG.PORT) {
+    app.listen(CONFIG.PORT, (err) => {
+      console.log(`HTTP at port ${CONFIG.PORT}:`, err || 'started');
+    });
+  }
+};
+
 if (CONFIG.PORT && CONFIG.PORT_SECURE) {
   app.set('forceSSLOptions', { httpsPort: CONFIG.PORT_SECURE });
   app.use(forceSSL);
@@ -38,27 +55,22 @@ if (__DEV__) {
   const webpackConfig = require('../../webpack/makeConfig')(__ENV__);
   const compiler = webpack(webpackConfig);
 
-  app.use(require('webpack-dev-middleware')(compiler, {
-    publicPath: webpackConfig.output.publicPath, noInfo: true
-  }));
-  app.use(require('webpack-hot-middleware')(compiler));
+  const webpackHotMiddleware = require('webpack-hot-middleware')(compiler);
+  const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+    noInfo: true
+  });
+
+  webpackDevMiddleware.waitUntilValid(listen);
+
+  app.use(webpackHotMiddleware);
+  app.use(webpackDevMiddleware);
 }
 
 app.use('/', express.static(`${__dirname}/../../dist`));
 
-if (CONFIG.PORT_SECURE) {
-  spdy.createServer({
-    key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
-    cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
-  }, app).listen(CONFIG.PORT_SECURE, (err) => {
-    console.log(`HTTPS at port ${CONFIG.PORT_SECURE}:`, err || 'started');
-  });
-}
-
-if (CONFIG.PORT) {
-  app.listen(CONFIG.PORT, (err) => {
-    console.log(`HTTP at port ${CONFIG.PORT}:`, err || 'started');
-  });
+if (!__DEV__) {
+  listen();
 }
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');

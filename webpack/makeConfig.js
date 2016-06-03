@@ -1,3 +1,4 @@
+import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WebpackIsomorphicToolsPlugin from 'webpack-isomorphic-tools/plugin';
 import webpack from 'webpack';
@@ -20,6 +21,9 @@ module.exports = (ENV) => {
       publicPath: '/'
     },
     plugins: [
+      new ProgressBarPlugin({
+        format: 'Build :percent   :msg'
+      }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV),
         __CLIENT__: true,
