@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
 import apiClientMiddleware from './apiClientMiddleware';
-import reducer from './modules';
+import reducer from './modules/index';
 
 function makeStore(apiClient, initialState) {
   let composed;
@@ -28,8 +28,8 @@ function makeStore(apiClient, initialState) {
   const store = createStore(reducer, initialState, composed);
 
   if (__DEV__ && module.hot) {
-    module.hot.accept('./modules', () =>
-      store.replaceReducer(require('./modules'))
+    module.hot.accept('./modules/index', () =>
+      store.replaceReducer(require('./modules/index'))
     );
   }
 
