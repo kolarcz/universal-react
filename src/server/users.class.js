@@ -42,4 +42,4 @@ class Users {
 
 }
 
-export default Users;
+export default new Users;

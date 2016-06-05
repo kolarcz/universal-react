@@ -4,8 +4,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import Users from './users.class.js';
-const users = new Users();
+import users from './users.class.js';
 
 const app = express.Router(); // eslint-disable-line new-cap
 

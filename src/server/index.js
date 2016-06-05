@@ -4,7 +4,9 @@ import forceSSL from 'express-force-ssl';
 import connectFlash from 'connect-flash';
 import compress from 'compression';
 import bodyParser from 'body-parser';
+import http from 'http';
 import spdy from 'spdy';
+import socketIo from 'socket.io';
 import fs from 'fs';
 
 const CONFIG = process.env;
@@ -12,18 +14,21 @@ const CONFIG = process.env;
 const app = express();
 app.disable('x-powered-by');
 
+const httpServer = CONFIG.PORT ? http.createServer(app) : null;
+const httpsServer = CONFIG.PORT_SECURE ? spdy.createServer({
+  key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
+  cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
+}, app) : null;
+
 const listen = () => {
   if (CONFIG.PORT_SECURE) {
-    spdy.createServer({
-      key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
-      cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
-    }, app).listen(CONFIG.PORT_SECURE, (err) => {
+    httpsServer.listen(CONFIG.PORT_SECURE, (err) => {
       console.log(`HTTPS at port ${CONFIG.PORT_SECURE}:`, err || 'started');
     });
   }
 
   if (CONFIG.PORT) {
-    app.listen(CONFIG.PORT, (err) => {
+    httpServer.listen(CONFIG.PORT, (err) => {
       console.log(`HTTP at port ${CONFIG.PORT}:`, err || 'started');
     });
   }
@@ -34,13 +39,15 @@ if (CONFIG.PORT && CONFIG.PORT_SECURE) {
   app.use(forceSSL);
 }
 
-app.use(compress());
-app.use(session({
+const sessionMiddleware = session({
   secret: CONFIG.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   name: 'sid'
-}));
+});
+
+app.use(compress());
+app.use(sessionMiddleware);
 app.use(connectFlash());
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -68,6 +75,10 @@ if (__DEV__) {
 }
 
 app.use('/', express.static(`${__dirname}/../../dist`));
+
+const sockets = socketIo(httpsServer || httpServer);
+sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
+require('./sockets').default(sockets);
 
 if (!__DEV__) {
   listen();
