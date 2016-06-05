@@ -5,7 +5,15 @@ class Users {
   }
 
   getUserById(id) {
-    return this.users.find(user => user.id === parseInt(id, 10));
+    const user = this.users.find(user => user.id === parseInt(id, 10));
+    return !user ? undefined : {
+      id: user.id,
+      username: user.username,
+      socialType: user.socialType,
+      socialId: user.socialId,
+      name: user.name,
+      photo: user.photo
+    };
   }
 
   getUserByLocal(username, password) {
