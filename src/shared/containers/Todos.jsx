@@ -9,7 +9,8 @@ import {
   del as deleteTodo,
   addRequest as addRequestTodo,
   markRequest as markRequestTodo,
-  delRequest as deleteRequestTodo
+  delRequest as deleteRequestTodo,
+  setRequest as setRequestTodos
 } from '../modules/todos';
 
 import Todo from './Todo';
@@ -105,20 +106,8 @@ Todos.propTypes = {
 };
 
 export default asyncConnect([{
-  promise: ({ store: { dispatch }, helpers: { apiClient } }) => {
-    if (!__CLIENT__) {
-      return new Promise((resolve) => {
-        apiClient.get('/getAllTodos').then((result) => {
-          Object.keys(result).forEach(id => {
-            const { text, done } = result[id];
-            dispatch(addTodo(id, text, done));
-          });
-          resolve();
-        });
-      });
-    }
-    return false;
-  }
+  promise: ({ store: { dispatch } }) =>
+    dispatch(setRequestTodos())
 }])(connect(state => ({
   todos: state.todos
 }), {

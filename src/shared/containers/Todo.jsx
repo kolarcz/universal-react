@@ -9,7 +9,7 @@ const Todo = ({ text, done, markTodo, deleteTodo }) => {
         <span className="glyphicon glyphicon-trash"></span>
       </button>
       <label style={{ marginBottom: '0px', fontWeight: 'normal', ...labelStyle }}>
-        <input checked={done} type="checkbox" onClick={markTodo} />
+        <input checked={done} type="checkbox" onChange={markTodo} />
         {` ${text}`}
       </label>
     </li>

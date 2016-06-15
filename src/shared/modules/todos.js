@@ -1,6 +1,7 @@
 const ADD = 'universal-react/todos/ADD';
 const MARK = 'universal-react/todos/MARK';
 const DELETE = 'universal-react/todos/DELETE';
+const SET = 'universal-react/todos/SET';
 
 
 export default function (state = {}, action) {
@@ -19,6 +20,9 @@ export default function (state = {}, action) {
       });
       return newState;
     }
+
+    case SET:
+      return action.result;
 
     default:
       return state;
@@ -68,5 +72,13 @@ export function del(id) {
   return {
     type: DELETE,
     result: { id }
+  };
+}
+
+export function setRequest() {
+  return {
+    types: [null, SET, null],
+    promise: ({ apiClient }) =>
+      apiClient.get('/getAllTodos')
   };
 }
