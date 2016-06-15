@@ -53,9 +53,11 @@ app.use(connectFlash());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  require('./routes').default(CONFIG)(req, res, next);
-});
+
+const sockets = socketIo(httpsServer || httpServer);
+sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
+app.use(require('./routes').default(CONFIG, sockets));
+
 
 if (__DEV__) {
   const webpack = require('webpack');
@@ -75,10 +77,6 @@ if (__DEV__) {
 }
 
 app.use('/', express.static(`${__dirname}/../../dist`));
-
-const sockets = socketIo(httpsServer || httpServer);
-sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
-require('./sockets').default(sockets);
 
 if (!__DEV__) {
   listen();

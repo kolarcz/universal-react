@@ -5,17 +5,40 @@ import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import users from './users.class.js';
+import todos from './todos.class.js';
 
-const app = express.Router(); // eslint-disable-line new-cap
+export default function (CONFIG, sockets) {
+  const app = express.Router(); // eslint-disable-line new-cap
 
-let initialized = false;
-
-function initialize(CONFIG) {
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((id, done) => done(null, users.getUserById(id) || false));
+  passport.deserializeUser((id, done) => done(null, users.getUserById(id)));
 
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use((req, res, next) => {
+    req.user = req.user || {};
+    res.emitToUser = (userId, ...args) => {
+      Object.keys(sockets.sockets.connected).forEach(key => {
+        const socket = sockets.sockets.connected[key];
+        const socketUserId = socket.request.user && socket.request.user.id;
+        if (socketUserId === userId) {
+          socket.emit(...args);
+        }
+      });
+    };
+    res.emitToAll = (...args) => {
+      Object.keys(sockets.sockets.connected).forEach(key => {
+        sockets.sockets.connected[key].emit(...args);
+      });
+    };
+    next();
+  });
+
+  const passInit = passport.initialize();
+  const passSess = passport.session();
+  sockets.use(({ request }, next) => passInit(request, {}, next));
+  sockets.use(({ request }, next) => passSess(request, {}, next));
 
 
   passport.use('local-signup', new LocalStrategy({
@@ -108,12 +131,28 @@ function initialize(CONFIG) {
   });
 
 
-  initialized = true;
-}
+  app.get('/getAllTodos', (req, res) => {
+    res.json(todos.getAll(req.user.id));
+  });
 
-export default function (CONFIG) {
-  if (!initialized) {
-    initialize(CONFIG);
-  }
+  app.post('/addTodo', (req, res) => {
+    const newTodo = todos.add(req.user.id, req.body.text, false);
+    res.json(newTodo);
+    res.emitToUser(req.user.id, 'addTodo', newTodo.id, newTodo.text, newTodo.done);
+  });
+
+  app.post('/markTodo', (req, res) => {
+    const markedTodo = todos.mark(req.user.id, req.body.id, req.body.done);
+    res.json(markedTodo);
+    res.emitToUser(req.user.id, 'markTodo', markedTodo.id, markedTodo.text, markedTodo.done);
+  });
+
+  app.post('/delTodo', (req, res) => {
+    const deletedTodo = todos.del(req.user.id, req.body.id);
+    res.json(deletedTodo);
+    res.emitToUser(req.user.id, 'deleteTodo', deletedTodo.id);
+  });
+
+
   return app;
 }

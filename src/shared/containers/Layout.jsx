@@ -97,22 +97,20 @@ Layout.propTypes = {
 
 export default asyncConnect([{
   promise: ({ store: { dispatch }, helpers: { apiClient } }) => {
-    const promises = [];
-
     if (!__CLIENT__) {
       const req = apiClient.getServerReq();
       const flashes = req.flash();
 
-      promises.push(dispatch(setUser(req.user || {})));
+      dispatch(setUser(req.user));
 
       Object.keys(flashes).forEach((type) => {
         flashes[type].forEach((message) => {
-          promises.push(dispatch(addFlash(type, message)));
+          dispatch(addFlash(type, message));
         });
       });
     }
 
-    return Promise.all(promises);
+    return false;
   }
 }])(connect(state => ({
   user: state.user

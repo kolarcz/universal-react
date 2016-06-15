@@ -3,24 +3,22 @@ const MARK = 'universal-react/todos/MARK';
 const DELETE = 'universal-react/todos/DELETE';
 
 
-export default function (state = [], action) {
+export default function (state = {}, action) {
   switch (action.type) {
     case ADD:
-      return [...state, {
-        text: action.text,
-        done: false
-      }];
-
     case MARK:
-      return state.map((todo, index) => {
-        if (index === action.i) {
-          return { ...todo, done: !todo.done };
-        }
-        return todo;
-      });
+      return {
+        ...state,
+        [action.result.id]: action.result
+      };
 
-    case DELETE:
-      return state.filter((todo, index) => (index !== action.i));
+    case DELETE: {
+      const newState = {};
+      Object.keys(state).filter(id => (id !== action.result.id)).forEach(id => {
+        newState[id] = state[id];
+      });
+      return newState;
+    }
 
     default:
       return state;
@@ -28,23 +26,47 @@ export default function (state = [], action) {
 }
 
 
-export function add(text) {
+export function addRequest(text) {
+  return {
+    types: [null, ADD, null],
+    promise: ({ apiClient }) =>
+      apiClient.post('/addTodo', { data: { text } })
+  };
+}
+
+export function add(id, text, done) {
   return {
     type: ADD,
-    text
+    result: { id, text, done }
   };
 }
 
-export function mark(i) {
+export function markRequest(id, done) {
+  return {
+    types: [null, MARK, null],
+    promise: ({ apiClient }) =>
+      apiClient.post('/markTodo', { data: { id, done } })
+  };
+}
+
+export function mark(id, text, done) {
   return {
     type: MARK,
-    i
+    result: { id, text, done }
   };
 }
 
-export function del(i) {
+export function delRequest(id) {
+  return {
+    types: [null, DELETE, null],
+    promise: ({ apiClient }) =>
+      apiClient.post('/delTodo', { data: { id } })
+  };
+}
+
+export function del(id) {
   return {
     type: DELETE,
-    i
+    result: { id }
   };
 }
