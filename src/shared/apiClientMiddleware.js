@@ -11,16 +11,15 @@ export default function apiClientMiddleware(apiClient) {
     }
 
     const [REQUEST, SUCCESS, FAILURE] = types;
-    next({ ...rest, type: REQUEST });
+    if (REQUEST) {
+      next({ ...rest, type: REQUEST });
+    }
 
     const actionPromise = promise({ apiClient });
     actionPromise.then(
-      result => next({ ...rest, result, type: SUCCESS }),
-      error => next({ ...rest, error, type: FAILURE })
-    ).catch(error => {
-      console.error('MIDDLEWARE ERROR:', error);
-      next({ ...rest, error, type: FAILURE });
-    });
+      SUCCESS ? (result => next({ ...rest, result, type: SUCCESS })) : null,
+      FAILURE ? (error => next({ ...rest, error, type: FAILURE })) : null
+    );
 
     return actionPromise;
   };
