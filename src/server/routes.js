@@ -4,14 +4,17 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import users from './users.class.js';
-import todos from './todos.class.js';
+import users from './db/users.model';
+import todos from './db/todos.model';
+
 
 export default function (CONFIG, sockets) {
   const app = express.Router(); // eslint-disable-line new-cap
 
   passport.serializeUser((user, done) => done(null, user.id));
-  passport.deserializeUser((id, done) => done(null, users.getUserById(id)));
+  passport.deserializeUser((id, done) => {
+    users.getUserById(id).then(user => done(null, user));
+  });
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -45,9 +48,11 @@ export default function (CONFIG, sockets) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) =>
-    done(null, users.setLocalUser(username, password))
-  ));
+  }, (req, username, password, done) => {
+    users.setLocalUser(username, password).then(user => {
+      return done(null, user);
+    });
+  }));
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/',
@@ -61,9 +66,9 @@ export default function (CONFIG, sockets) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) =>
-    done(null, users.getUserByLocal(username, password))
-  ));
+  }, (req, username, password, done) => {
+    users.getUserByLocal(username, password).then(user => done(null, user));
+  }));
 
   app.post('/login', passport.authenticate('local-login', {
     successRedirect: '/',
@@ -78,16 +83,20 @@ export default function (CONFIG, sockets) {
       clientID: CONFIG.SOCIAL_FACEBOOK_ID,
       clientSecret: CONFIG.SOCIAL_FACEBOOK_SECRET,
       callbackURL: CONFIG.SOCIAL_FACEBOOK_CALLBACK
-    }, (token, refreshToken, profile, done) =>
-      done(
-        null,
-        users.getUserBySocial('facebook', profile.id) ||
-        users.setSocialUser('facebook', profile.id,
-          profile.displayName,
-          `https://graph.facebook.com/${profile.id}/picture`
-        )
-      )
-    ));
+    }, (token, refreshToken, profile, done) => () => {
+      users.getUserBySocial('facebook', profile.id).then(user => {
+        if (user) {
+          done(null, user);
+        } else {
+          users.setSocialUser('facebook', profile.id,
+            profile.displayName,
+            `https://graph.facebook.com/${profile.id}/picture`
+          ).then(user => {
+            done(null, user);
+          });
+        }
+      });
+    }));
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
@@ -103,16 +112,20 @@ export default function (CONFIG, sockets) {
       clientID: CONFIG.SOCIAL_GOOGLE_ID,
       clientSecret: CONFIG.SOCIAL_GOOGLE_SECRET,
       callbackURL: CONFIG.SOCIAL_GOOGLE_CALLBACK
-    }, (token, refreshToken, profile, done) =>
-      done(
-        null,
-        users.getUserBySocial('google', profile.id) ||
-        users.setSocialUser('google', profile.id,
-          profile.displayName,
-          profile.photos[0].value
-        )
-      )
-    ));
+    }, (token, refreshToken, profile, done) => () => {
+      users.getUserBySocial('google', profile.id).then(user => {
+        if (user) {
+          done(null, user);
+        } else {
+          users.setSocialUser('google', profile.id,
+            profile.displayName,
+            profile.photos[0].value
+          ).then(user => {
+            done(null, user);
+          });
+        }
+      });
+    }));
 
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
     app.get('/auth/google/callback', passport.authenticate('google', {
@@ -132,25 +145,34 @@ export default function (CONFIG, sockets) {
 
 
   app.get('/getAllTodos', (req, res) => {
-    res.json(todos.getAll(req.user.id));
+    todos.getAll(req.user.id).then((todos) => {
+      const resTodos = {};
+      todos.forEach((todo) => {
+        resTodos[todo.id] = todo;
+      });
+      res.json(resTodos);
+    });
   });
 
   app.post('/addTodo', (req, res) => {
-    const newTodo = todos.add(req.user.id, req.body.text, false);
-    res.json(newTodo);
-    res.emitToUser(req.user.id, 'addTodo', newTodo.id, newTodo.text, newTodo.done);
+    todos.add(req.user.id, req.body.text, false).then((todo) => {
+      res.json(todo);
+      res.emitToUser(req.user.id, 'addTodo', todo.id, todo.text, todo.done);
+    });
   });
 
   app.post('/markTodo', (req, res) => {
-    const markedTodo = todos.mark(req.user.id, req.body.id, req.body.done);
-    res.json(markedTodo);
-    res.emitToUser(req.user.id, 'markTodo', markedTodo.id, markedTodo.text, markedTodo.done);
+    todos.mark(req.user.id, req.body.id, req.body.done).then((todo) => {
+      res.json(todo);
+      res.emitToUser(req.user.id, 'markTodo', todo.id, todo.text, todo.done);
+    });
   });
 
   app.post('/delTodo', (req, res) => {
-    const deletedTodo = todos.del(req.user.id, req.body.id);
-    res.json(deletedTodo);
-    res.emitToUser(req.user.id, 'deleteTodo', deletedTodo.id);
+    todos.del(req.user.id, req.body.id).then((todo) => {
+      res.json(todo);
+      res.emitToUser(req.user.id, 'deleteTodo', todo.id);
+    });
   });
 
 
