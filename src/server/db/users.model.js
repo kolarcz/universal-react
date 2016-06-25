@@ -30,15 +30,15 @@ class Users {
   }
 
   getUserByLocal(username, password) {
-    return this.db.findOne({
-      where: {
-        username,
-        $or: password === undefined ? [1] : [
-          { password: null },
-          { password }
-        ]
-      }
-    }).then((res) =>
+    const where = { username };
+    if (password !== undefined) {
+      where.$or = [
+        { password: null },
+        { password }
+      ];
+    }
+
+    return this.db.findOne({ where }).then((res) =>
       res && res.get()
     );
   }
