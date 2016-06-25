@@ -54,19 +54,19 @@ class Users {
   }
 
   setLocalUser(username, password) {
-    return this.getUserByLocal(username).then((user) => {
-      return user ? false : this.db.create({ username, password, name: username }).then((res) =>
+    return this.getUserByLocal(username).then((user) => (
+      user ? false : this.db.create({ username, password, name: username }).then((res) =>
         res && res.get()
-      );
-    });
+      )
+    ));
   }
 
   setSocialUser(socialType, socialId, name, photo) {
-    return this.getUserBySocial(socialType, socialId).then((user) => {
-      return user ? false : this.db.create({ socialType, socialId, name, photo }).then((res) =>
+    return this.getUserBySocial(socialType, socialId).then((user) => (
+      user ? false : this.db.create({ socialType, socialId, name, photo }).then((res) =>
         res && res.get()
       )
-    });
+    ));
   }
 
 }

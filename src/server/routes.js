@@ -49,9 +49,9 @@ export default function (CONFIG, sockets) {
     passwordField: 'password',
     passReqToCallback: true
   }, (req, username, password, done) => {
-    users.setLocalUser(username, password).then(user => {
-      return done(null, user);
-    });
+    users.setLocalUser(username, password).then(user =>
+      done(null, user)
+    );
   }));
 
   app.post('/signup', passport.authenticate('local-signup', {
