@@ -4,6 +4,10 @@ import sequelize from './sequelize';
 class Users {
 
   constructor() {
+    this.userAttribs = [
+      'id', 'username', 'socialType', 'socialId', 'name', 'photo'
+    ];
+
     this.db = sequelize.define('user', {
       id: {
         type: Sequelize.INTEGER,
@@ -20,11 +24,12 @@ class Users {
       freezeTableName: true,
       timestamps: false
     });
+
     this.db.sync();
   }
 
   async getUserById(id) {
-    const res = await this.db.findById(id);
+    const res = await this.db.findById(id, { attributes: this.userAttribs });
     return res && res.get();
   }
 
@@ -37,13 +42,17 @@ class Users {
       ];
     }
 
-    const res = await this.db.findOne({ where });
+    const res = await this.db.findOne({
+      where,
+      attributes: this.userAttribs
+    });
     return res && res.get();
   }
 
   async getUserBySocial(socialType, socialId) {
     const res = await this.db.findOne({
-      where: { socialType, socialId }
+      where: { socialType, socialId },
+      attributes: this.userAttribs
     });
     return res && res.get();
   }
@@ -52,7 +61,10 @@ class Users {
     const user = await this.getUserByLocal(username);
     if (user) return false;
 
-    const res = await this.db.create({ username, password, name: username });
+    const res = await this.db.create(
+      { username, password, name: username },
+      { attributes: this.userAttribs }
+    );
     return res && res.get();
   }
 
@@ -60,7 +72,10 @@ class Users {
     const user = await this.getUserBySocial(socialType, socialId);
     if (user) return false;
 
-    const res = await this.db.create({ socialType, socialId, name, photo });
+    const res = await this.db.create(
+      { socialType, socialId, name, photo },
+      { attributes: this.userAttribs }
+    );
     return res && res.get();
   }
 
