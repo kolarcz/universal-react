@@ -42,7 +42,7 @@ class Users {
   }
 
   async getUserBySocial(socialType, socialId) {
-    const res = await this.db.findAll({
+    const res = await this.db.findOne({
       where: { socialType, socialId }
     });
     return res && res.get();
