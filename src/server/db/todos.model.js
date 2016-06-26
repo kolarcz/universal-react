@@ -20,36 +20,31 @@ class Todos {
     this.db.sync();
   }
 
-  add(userId, text, done) {
-    return this.db.create({ userId: userId || null, text, done }).then((res) =>
-      res.get()
-    );
+  async add(userId, text, done) {
+    const res = await this.db.create({ userId: userId || null, text, done });
+    return res.get();
   }
 
-  mark(userId, todoId, done) {
-    return this.db.update({ done }, {
+  async mark(userId, todoId, done) {
+    await this.db.update({ done }, {
       where: { id: todoId, userId: userId || null }
-    }).then(() =>
-      this.db.findById(todoId)
-    ).then((res) =>
-      res.get()
-    );
+    });
+    const res = await this.db.findById(todoId);
+    return res.get();
   }
 
-  del(userId, todoId) {
-    return this.db.destroy({
+  async del(userId, todoId) {
+    await this.db.destroy({
       where: { id: todoId, userId: userId || null }
-    }).then(() =>
-      ({ id: todoId })
-    );
+    });
+    return ({ id: todoId });
   }
 
-  getAll(userId) {
-    return this.db.findAll({
+  async getAll(userId) {
+    const res = await this.db.findAll({
       where: { userId: userId || null }
-    }).then((res) =>
-      res.map(r => r.get())
-    );
+    });
+    return res.map(r => r.get());
   }
 }
 

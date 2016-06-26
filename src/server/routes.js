@@ -48,10 +48,9 @@ export default function (CONFIG, sockets) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) => {
-    users.setLocalUser(username, password).then(user =>
-      done(null, user)
-    );
+  }, async (req, username, password, done) => {
+    const user = await users.setLocalUser(username, password);
+    done(null, user);
   }));
 
   app.post('/signup', passport.authenticate('local-signup', {
@@ -66,8 +65,9 @@ export default function (CONFIG, sockets) {
     usernameField: 'username',
     passwordField: 'password',
     passReqToCallback: true
-  }, (req, username, password, done) => {
-    users.getUserByLocal(username, password).then(user => done(null, user));
+  }, async (req, username, password, done) => {
+    const user = await users.getUserByLocal(username, password);
+    done(null, user);
   }));
 
   app.post('/login', passport.authenticate('local-login', {
@@ -83,19 +83,17 @@ export default function (CONFIG, sockets) {
       clientID: CONFIG.SOCIAL_FACEBOOK_ID,
       clientSecret: CONFIG.SOCIAL_FACEBOOK_SECRET,
       callbackURL: CONFIG.SOCIAL_FACEBOOK_CALLBACK
-    }, (token, refreshToken, profile, done) => () => {
-      users.getUserBySocial('facebook', profile.id).then(user => {
-        if (user) {
-          done(null, user);
-        } else {
-          users.setSocialUser('facebook', profile.id,
-            profile.displayName,
-            `https://graph.facebook.com/${profile.id}/picture`
-          ).then(user => {
-            done(null, user);
-          });
-        }
-      });
+    }, async (token, refreshToken, profile, done) => {
+      const user = await users.getUserBySocial('facebook', profile.id);
+      if (user) {
+        done(null, user);
+      } else {
+        const user = await users.setSocialUser('facebook', profile.id,
+          profile.displayName,
+          `https://graph.facebook.com/${profile.id}/picture`
+        );
+        done(null, user);
+      }
     }));
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
@@ -112,19 +110,17 @@ export default function (CONFIG, sockets) {
       clientID: CONFIG.SOCIAL_GOOGLE_ID,
       clientSecret: CONFIG.SOCIAL_GOOGLE_SECRET,
       callbackURL: CONFIG.SOCIAL_GOOGLE_CALLBACK
-    }, (token, refreshToken, profile, done) => () => {
-      users.getUserBySocial('google', profile.id).then(user => {
-        if (user) {
-          done(null, user);
-        } else {
-          users.setSocialUser('google', profile.id,
-            profile.displayName,
-            profile.photos[0].value
-          ).then(user => {
-            done(null, user);
-          });
-        }
-      });
+    }, async (token, refreshToken, profile, done) => {
+      const user = await users.getUserBySocial('google', profile.id);
+      if (user) {
+        done(null, user);
+      } else {
+        const user = await users.setSocialUser('google', profile.id,
+          profile.displayName,
+          profile.photos[0].value
+        );
+        done(null, user);
+      }
     }));
 
     app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -144,35 +140,31 @@ export default function (CONFIG, sockets) {
   });
 
 
-  app.get('/getAllTodos', (req, res) => {
-    todos.getAll(req.user.id).then((todos) => {
-      const resTodos = {};
-      todos.forEach((todo) => {
-        resTodos[todo.id] = todo;
-      });
-      res.json(resTodos);
+  app.get('/getAllTodos', async (req, res) => {
+    const todosList = await todos.getAll(req.user.id);
+    const resTodos = {};
+    todosList.forEach((todo) => {
+      resTodos[todo.id] = todo;
     });
+    res.json(resTodos);
   });
 
-  app.post('/addTodo', (req, res) => {
-    todos.add(req.user.id, req.body.text, false).then((todo) => {
-      res.json(todo);
-      res.emitToUser(req.user.id, 'addTodo', todo.id, todo.text, todo.done);
-    });
+  app.post('/addTodo', async (req, res) => {
+    const todo = await todos.add(req.user.id, req.body.text, false);
+    res.json(todo);
+    res.emitToUser(req.user.id, 'addTodo', todo.id, todo.text, todo.done);
   });
 
-  app.post('/markTodo', (req, res) => {
-    todos.mark(req.user.id, req.body.id, req.body.done).then((todo) => {
-      res.json(todo);
-      res.emitToUser(req.user.id, 'markTodo', todo.id, todo.text, todo.done);
-    });
+  app.post('/markTodo', async (req, res) => {
+    const todo = await todos.mark(req.user.id, req.body.id, req.body.done);
+    res.json(todo);
+    res.emitToUser(req.user.id, 'markTodo', todo.id, todo.text, todo.done);
   });
 
-  app.post('/delTodo', (req, res) => {
-    todos.del(req.user.id, req.body.id).then((todo) => {
-      res.json(todo);
-      res.emitToUser(req.user.id, 'deleteTodo', todo.id);
-    });
+  app.post('/delTodo', async (req, res) => {
+    const todo = await todos.del(req.user.id, req.body.id);
+    res.json(todo);
+    res.emitToUser(req.user.id, 'deleteTodo', todo.id);
   });
 
 

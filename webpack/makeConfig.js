@@ -48,8 +48,12 @@ module.exports = (ENV) => {
         test: /\.jsx?$/,
         loader: `babel-loader?${JSON.stringify({
           presets: ['react', 'es2015'],
-          plugins: ['add-module-exports', 'transform-object-rest-spread']
-            .concat(isDEV ? 'react-hot-loader/babel' : [])
+          plugins: [
+            'add-module-exports',
+            ['transform-runtime', { polyfill: false, regenerator: true }],
+            'transform-object-rest-spread',
+            'transform-async-to-generator'
+          ].concat(isDEV ? 'react-hot-loader/babel' : [])
         })}${isDEV ? '!eslint-loader' : ''}`,
         exclude: /node_modules/
       }, {

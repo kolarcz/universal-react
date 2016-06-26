@@ -23,13 +23,12 @@ class Users {
     this.db.sync();
   }
 
-  getUserById(id) {
-    return this.db.findById(id).then((res) =>
-      res && res.get()
-    );
+  async getUserById(id) {
+    const res = await this.db.findById(id);
+    return res && res.get();
   }
 
-  getUserByLocal(username, password) {
+  async getUserByLocal(username, password) {
     const where = { username };
     if (password !== undefined) {
       where.$or = [
@@ -38,35 +37,31 @@ class Users {
       ];
     }
 
-    return this.db.findOne({ where }).then((res) =>
-      res && res.get()
-    );
+    const res = await this.db.findOne({ where });
+    return res && res.get();
   }
 
-  getUserBySocial(socialType, socialId) {
-    return this.db.findAll({
-      where: {
-        socialType, socialId
-      }
-    }).then((res) =>
-      res && res.get()
-    );
+  async getUserBySocial(socialType, socialId) {
+    const res = await this.db.findAll({
+      where: { socialType, socialId }
+    });
+    return res && res.get();
   }
 
-  setLocalUser(username, password) {
-    return this.getUserByLocal(username).then((user) => (
-      user ? false : this.db.create({ username, password, name: username }).then((res) =>
-        res && res.get()
-      )
-    ));
+  async setLocalUser(username, password) {
+    const user = await this.getUserByLocal(username);
+    if (user) return false;
+
+    const res = await this.db.create({ username, password, name: username });
+    return res && res.get();
   }
 
-  setSocialUser(socialType, socialId, name, photo) {
-    return this.getUserBySocial(socialType, socialId).then((user) => (
-      user ? false : this.db.create({ socialType, socialId, name, photo }).then((res) =>
-        res && res.get()
-      )
-    ));
+  async setSocialUser(socialType, socialId, name, photo) {
+    const user = await this.getUserBySocial(socialType, socialId);
+    if (user) return false;
+
+    const res = await this.db.create({ socialType, socialId, name, photo });
+    return res && res.get();
   }
 
 }
