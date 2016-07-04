@@ -4,14 +4,10 @@ import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 import React from 'react';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
-// import fs from 'fs';
 
 import ApiClient from '../shared/apiClient';
 import makeRoutes from '../shared/makeRoutes';
 import makeStore from '../shared/makeStore';
-import makeHistory from '../shared/makeHistory';
-
-// var webpackConfig = require('../../webpack/makeConfig')(__ENV__);
 
 export default function (req, res) {
   if (__DEV__) {
@@ -20,11 +16,9 @@ export default function (req, res) {
 
   const apiClient = new ApiClient(req);
   const store = makeStore(apiClient, undefined);
-  const history = makeHistory();
   const routes = makeRoutes();
-  const location = history.createLocation(req.url);
 
-  match({ routes, location }, async (error, redirectLocation, renderProps) => {
+  match({ routes, location: req.url }, async (error, redirectLocation, renderProps) => {
     if (error) {
       return res.status(500).end('Internal server error');
     } else if (redirectLocation) {
@@ -43,19 +37,6 @@ export default function (req, res) {
 
     const assets = global.webpackIsomorphicTools.assets();
     const helmet = Helmet.rewind();
-
-    /* if (!__DEV__ && req.isSpdy) {
-      Object.keys(assets.styles).forEach((key, i) => {
-        const file = assets.styles[key];
-        res.push(file, { response: { 'Content-Type': 'text/css' } })
-          .end(fs.readFileSync(webpackConfig.output.path + file, 'utf-8'));
-      });
-      Object.keys(assets.javascript).forEach((key, i) => {
-        const file = assets.javascript[key];
-        res.push(file, { response: { 'Content-Type': 'application/javascript' } })
-          .end(fs.readFileSync(webpackConfig.output.path + file, 'utf-8'));
-      });
-    } */
 
     const stringifiedState = JSON.stringify(store.getState());
     const content = `<!DOCTYPE html>${ReactDOMServer.renderToString(
