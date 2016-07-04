@@ -8,16 +8,19 @@ import http from 'http';
 import spdy from 'spdy';
 import socketIo from 'socket.io';
 import fs from 'fs';
+import path from 'path';
+import WebpackIsomorphicTools from 'webpack-isomorphic-tools';
 
 const CONFIG = process.env;
+const basePath = path.resolve(`${__dirname}/../..`);
 
 const app = express();
 app.disable('x-powered-by');
 
 const httpServer = CONFIG.PORT ? http.createServer(app) : null;
 const httpsServer = CONFIG.PORT_SECURE ? spdy.createServer({
-  key: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_KEY}`),
-  cert: fs.readFileSync(`${__dirname}/../../${CONFIG.FILE_CRT}`)
+  key: fs.readFileSync(`${basePath}/${CONFIG.FILE_KEY}`),
+  cert: fs.readFileSync(`${basePath}/${CONFIG.FILE_CRT}`)
 }, app) : null;
 
 const listen = () => {
@@ -63,6 +66,7 @@ if (__DEV__) {
   const webpack = require('webpack');
   const webpackConfig = require('../../webpack/makeConfig')(__ENV__);
   const compiler = webpack(webpackConfig);
+  const minimatch = require('minimatch');
 
   const webpackHotMiddleware = require('webpack-hot-middleware')(compiler);
   const webpackDevMiddleware = require('webpack-dev-middleware')(compiler, {
@@ -74,23 +78,31 @@ if (__DEV__) {
 
   app.use(webpackHotMiddleware);
   app.use(webpackDevMiddleware);
+
+  compiler.plugin('done', () => {
+    minimatch.match(
+      Object.keys(require.cache),
+      `${basePath}/src/{shared/**,server/renderer.js}`
+    ).forEach(modulePath => {
+      delete require.cache[modulePath];
+    });
+  });
 }
 
-app.use('/', express.static(`${__dirname}/../../dist`));
+app.use('/', express.static(`${basePath}/dist`));
 
-if (!__DEV__) {
-  listen();
-}
-
-const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(
   require('../../webpack/makeAssets')(__ENV__)
 );
 
 global.webpackIsomorphicTools
   .development(__DEV__)
-  .server(`${__dirname}/../../`, () => {
+  .server(basePath, () => {
     app.get('*', (req, res) => {
       require('./renderer').default(req, res);
     });
   });
+
+if (!__DEV__) {
+  listen();
+}
