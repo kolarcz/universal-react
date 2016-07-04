@@ -38,25 +38,25 @@ export function addRequest(text) {
   };
 }
 
-export function add(id, text, done) {
+export function add(id, text, completed) {
   return {
     type: ADD,
-    result: { id, text, done }
+    result: { id, text, completed }
   };
 }
 
-export function markRequest(id, done) {
+export function markRequest(id, completed) {
   return {
     types: [null, MARK, null],
     promise: ({ apiClient }) =>
-      apiClient.post('/markTodo', { data: { id, done } })
+      apiClient.post('/markTodo', { data: { id, completed } })
   };
 }
 
-export function mark(id, text, done) {
+export function mark(id, text, completed) {
   return {
     type: MARK,
-    result: { id, text, done }
+    result: { id, text, completed }
   };
 }
 

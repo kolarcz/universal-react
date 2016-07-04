@@ -12,7 +12,7 @@ class Todos {
       },
       userId: Sequelize.INTEGER,
       text: Sequelize.STRING,
-      done: Sequelize.BOOLEAN
+      completed: Sequelize.BOOLEAN
     }, {
       freezeTableName: true,
       timestamps: false
@@ -20,13 +20,13 @@ class Todos {
     this.db.sync();
   }
 
-  async add(userId, text, done) {
-    const res = await this.db.create({ userId: userId || null, text, done });
+  async add(userId, text, completed) {
+    const res = await this.db.create({ userId: userId || null, text, completed });
     return res.get();
   }
 
-  async mark(userId, todoId, done) {
-    await this.db.update({ done }, {
+  async mark(userId, todoId, completed) {
+    await this.db.update({ completed }, {
       where: { id: todoId, userId: userId || null }
     });
     const res = await this.db.findById(todoId);

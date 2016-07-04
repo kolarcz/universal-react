@@ -46,8 +46,8 @@ class Todos extends Component {
       }
     };
 
-    const markTodoEvent = (id, done) => {
-      markRequestTodo(id, done);
+    const markTodoEvent = (id, completed) => {
+      markRequestTodo(id, completed);
     };
 
     const deleteTodoEvent = (id, e) => {
@@ -80,8 +80,8 @@ class Todos extends Component {
                   <Todo
                     key={id}
                     text={todos[id].text}
-                    done={todos[id].done}
-                    markTodo={() => markTodoEvent(id, !todos[id].done)}
+                    completed={todos[id].completed}
+                    markTodo={() => markTodoEvent(id, !todos[id].completed)}
                     deleteTodo={(e) => deleteTodoEvent(id, e)}
                   />
                 ))}

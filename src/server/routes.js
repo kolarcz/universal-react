@@ -152,13 +152,13 @@ export default function (CONFIG, sockets) {
   app.post('/addTodo', async (req, res) => {
     const todo = await todos.add(req.user.id, req.body.text, false);
     res.json(todo);
-    res.emitToUser(req.user.id, 'addTodo', todo.id, todo.text, todo.done);
+    res.emitToUser(req.user.id, 'addTodo', todo.id, todo.text, todo.completed);
   });
 
   app.post('/markTodo', async (req, res) => {
-    const todo = await todos.mark(req.user.id, req.body.id, req.body.done);
+    const todo = await todos.mark(req.user.id, req.body.id, req.body.completed);
     res.json(todo);
-    res.emitToUser(req.user.id, 'markTodo', todo.id, todo.text, todo.done);
+    res.emitToUser(req.user.id, 'markTodo', todo.id, todo.text, todo.completed);
   });
 
   app.post('/delTodo', async (req, res) => {
