@@ -16,7 +16,8 @@ module.exports = (ENV) => {
         `${__dirname}/../src/client/index.js`
       ]),
     output: {
-      filename: 'bundle.js',
+      filename: '[hash:8].js',
+      chunkFilename: '[hash:8].[id].js',
       path: `${__dirname}/../dist`,
       publicPath: '/'
     },
@@ -34,7 +35,7 @@ module.exports = (ENV) => {
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoErrorsPlugin()
     ] : [
-      new ExtractTextPlugin('style.css', { allChunks: true }),
+      new ExtractTextPlugin('[hash:8].css', { allChunks: true }),
       new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin({ compress: { screw_ie8: true, warnings: false } })
     ]).concat(
@@ -68,13 +69,13 @@ module.exports = (ENV) => {
           : ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
       }, {
         test: /\.(eot|ttf|woff2?)(\?.*)?$/,
-        loader: 'url-loader?name=[hash:base64:6].[ext]&limit=1'
+        loader: 'url-loader?name=[hash:8].[ext]&limit=1'
       }, {
         test: /\.(gif|jpe?g|png|svg)(\?.*)?$/,
-        loader: 'url-loader?name=[hash:base64:6].[ext]&limit=10000'
+        loader: 'url-loader?name=[hash:8].[ext]&limit=10000'
       }, {
         test: /\.ico(\?.*)?$/,
-        loader: 'url-loader?name=[hash:base64:6].[ext]&limit=1'
+        loader: 'url-loader?name=[hash:8].[ext]&limit=1'
       }]
     }
   };
