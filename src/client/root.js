@@ -24,4 +24,4 @@ Root.propTypes = {
   helpers: PropTypes.object
 };
 
-export default Root;
+export { Root, routes };
