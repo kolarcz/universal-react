@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import socketIo from 'socket.io-client';
 import { match } from 'react-router';
-import { AppContainer } from 'react-hot-loader';
 
 import ApiClient from '../shared/apiClient';
 import makeStore from '../shared/makeStore';
@@ -16,16 +15,18 @@ const history = makeHistory(store);
 
 const render = () => {
   const { Root, routes } = require('./root');
+  let forRender = <Root store={store} history={history} helpers={{ apiClient }} />;
+
+  if (__DEV__) {
+    const AppContainer = require('react-hot-loader').AppContainer;
+    forRender = <AppContainer>{forRender}</AppContainer>;
+  }
 
   const { pathname, search, hash } = window.location;
   const location = `${pathname}${search}${hash}`;
 
   match({ routes, location }, () => {
-    ReactDOM.render((
-      <AppContainer>
-        <Root store={store} history={history} helpers={{ apiClient }} />
-      </AppContainer>
-    ), document.getElementById('root'));
+    ReactDOM.render(forRender, document.getElementById('root'));
   });
 };
 
