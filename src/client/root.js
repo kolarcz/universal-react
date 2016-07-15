@@ -5,23 +5,24 @@ import { ReduxAsyncConnect } from 'redux-connect';
 
 import makeRoutes from '../shared/makeRoutes';
 
-const routes = makeRoutes();
+export default function (store) {
+  const routes = makeRoutes(store);
 
-const Root = ({ store, history, helpers }) => (
-  <Provider store={store}>
-    <Router
-      history={history}
-      render={(props) => (<ReduxAsyncConnect {...props} helpers={helpers} />)}
-    >
-      {routes}
-    </Router>
-  </Provider>
-);
+  const Root = ({ history, helpers }) => (
+    <Provider store={store}>
+      <Router
+        history={history}
+        render={(props) => (<ReduxAsyncConnect {...props} helpers={helpers} />)}
+      >
+        {routes}
+      </Router>
+    </Provider>
+  );
 
-Root.propTypes = {
-  store: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
-  helpers: PropTypes.object
-};
+  Root.propTypes = {
+    history: PropTypes.object.isRequired,
+    helpers: PropTypes.object
+  };
 
-export { Root, routes };
+  return { Root, routes };
+}

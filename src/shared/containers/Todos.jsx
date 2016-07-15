@@ -57,7 +57,7 @@ class Todos extends Component {
 
     return (
       <div>
-        <Helmet title="Todo" />
+        <Helmet title="Todos" />
         <h1>Todos</h1>
 
         <form className="form-horizontal" onSubmit={addTodoEvent}>

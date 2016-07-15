@@ -14,8 +14,8 @@ const store = makeStore(apiClient, window.$STATE);
 const history = makeHistory(store);
 
 const render = () => {
-  const { Root, routes } = require('./root');
-  let forRender = <Root store={store} history={history} helpers={{ apiClient }} />;
+  const { Root, routes } = require('./root')(store);
+  let forRender = <Root history={history} helpers={{ apiClient }} />;
 
   if (__DEV__) {
     const AppContainer = require('react-hot-loader').AppContainer;
@@ -32,7 +32,7 @@ const render = () => {
 
 render();
 
-if (__DEV__ && module.hot) {
+if (module.hot) {
   module.hot.accept('./root', () => {
     render();
   });

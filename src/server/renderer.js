@@ -16,7 +16,7 @@ export default function (req, res) {
 
   const apiClient = new ApiClient(req);
   const store = makeStore(apiClient, undefined);
-  const routes = makeRoutes();
+  const routes = makeRoutes(store);
 
   match({ routes, location: req.url }, async (error, redirectLocation, renderProps) => {
     if (error) {

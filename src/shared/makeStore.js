@@ -1,7 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 
+import ReducerRegistry from './ReducerRegistry';
 import apiClientMiddleware from './apiClientMiddleware';
-import reducer from './modules/index';
+import reducers from './modules/index';
 
 function makeStore(apiClient, initialState) {
   let composed;
@@ -25,11 +26,18 @@ function makeStore(apiClient, initialState) {
     );
   }
 
-  const store = createStore(reducer, initialState, composed);
+  const reducerRegistry = new ReducerRegistry(reducers, initialState);
 
-  if (__DEV__ && module.hot) {
+  const store = createStore(reducerRegistry.getMainReducer(), initialState, composed);
+  store.registerReducers = reducerRegistry.register.bind(reducerRegistry);
+
+  reducerRegistry.setChangeListener(mainReducer =>
+    store.replaceReducer(mainReducer)
+  );
+
+  if (module.hot) {
     module.hot.accept('./modules/index', () =>
-      store.replaceReducer(require('./modules/index'))
+      reducerRegistry.register(require('./modules/index'))
     );
   }
 
