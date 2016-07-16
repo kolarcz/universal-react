@@ -36,6 +36,8 @@ const Login = ({ fields: { username, password }, submitting, invalid }) => (
             placeholder="Username"
             {...username}
           />
+        </div>
+        <div className="col-sm-6 col-md-5 col-lg-4">
           {username.touched && username.error && <div className="help-block">{username.error}</div>}
         </div>
       </div>
@@ -48,6 +50,8 @@ const Login = ({ fields: { username, password }, submitting, invalid }) => (
             placeholder="Password"
             {...password}
           />
+        </div>
+        <div className="col-sm-6 col-md-5 col-lg-4">
           {password.touched && password.error && <div className="help-block">{password.error}</div>}
         </div>
       </div>

@@ -33,6 +33,8 @@ const Signup = ({ fields: { username, password, password2 }, submitting, invalid
             placeholder="Username"
             {...username}
           />
+        </div>
+        <div className="col-sm-6 col-md-5 col-lg-4">
           {username.touched && username.error && <div className="help-block">{username.error}</div>}
         </div>
       </div>
@@ -45,6 +47,8 @@ const Signup = ({ fields: { username, password, password2 }, submitting, invalid
             placeholder="Password"
             {...password}
           />
+        </div>
+        <div className="col-sm-6 col-md-5 col-lg-4">
           {password.touched && password.error && <div className="help-block">{password.error}</div>}
         </div>
       </div>
@@ -56,6 +60,8 @@ const Signup = ({ fields: { username, password, password2 }, submitting, invalid
             placeholder="Password again"
             {...password2}
           />
+        </div>
+        <div className="col-sm-6 col-md-5 col-lg-4">
           {
             password2.touched &&
             password2.error &&
