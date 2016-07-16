@@ -56,7 +56,7 @@ export default function (CONFIG, sockets) {
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/',
     successFlash: 'Logged in',
-    failureRedirect: '/login',
+    failureRedirect: '/signup',
     failureFlash: 'Username already exists'
   }));
 

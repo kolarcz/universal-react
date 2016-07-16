@@ -62,12 +62,12 @@ const Layout = ({ children, user }) => {
               {user.name ? (
                 <li>
                   <a href="/logout">
-                    <i className="fa fa-sign-out fa-lg" /> Logout
+                    <i className="fa fa-sign-out fa-lg" /> Log out
                   </a>
                 </li>
               ) : (
                 <Link {...addLinkProps} to="/login">
-                  <i className="fa fa-sign-in fa-lg" /> Login
+                  <i className="fa fa-sign-in fa-lg" /> Log in
                 </Link>
               )}
             </ul>

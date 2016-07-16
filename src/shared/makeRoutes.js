@@ -5,6 +5,7 @@ import Layout from './containers/Layout';
 import Home from './containers/Home';
 import Counter from './containers/Counter';
 import Login from './containers/Login';
+import Signup from './containers/Signup';
 
 if (typeof require.ensure !== 'function') {
   require.ensure = (d, c) => c(require);
@@ -30,6 +31,7 @@ const makeRoutes = (store) => (
       }}
     />
     <Route path="/login" component={Login} />
+    <Route path="/signup" component={Signup} />
   </Route>
 );
 

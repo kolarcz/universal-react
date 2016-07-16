@@ -1,13 +1,12 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router';
 
-const Login = () => (
+const Signup = () => (
   <div>
-    <Helmet title="Log in" />
-    <h1>Log in</h1>
+    <Helmet title="Sign up" />
+    <h1>Sign up</h1>
 
-    <form className="form-horizontal" id="form" method="post" action="/login">
+    <form className="form-horizontal" id="form" method="post" action="/signup">
       <div className="form-group">
         <div className="col-sm-6 col-md-5 col-lg-4">
           <input
@@ -30,7 +29,7 @@ const Login = () => (
       </div>
       <div className="form-group">
         <div className="col-xs-6 col-sm-3 col-md-3 col-lg-2">
-          <button type="submit" className="btn btn-success btn-block">Log in</button>
+          <button type="submit" className="btn btn-success btn-block">Sign up</button>
         </div>
         <div className="col-xs-6 col-sm-3 col-md-2 col-lg-2">
           <a className="btn btn-default" href="/auth/facebook">
@@ -42,13 +41,8 @@ const Login = () => (
           </a>
         </div>
       </div>
-      <div className="form-group">
-        <div className="col-lg-12">
-          You don't have an account? <Link to="/signup">Sign up</Link>
-        </div>
-      </div>
     </form>
   </div>
 );
 
-export default Login;
+export default Signup;
