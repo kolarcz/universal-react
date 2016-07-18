@@ -4,8 +4,8 @@ import activeComponent from 'react-router-active-component';
 import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
 
-import { set as setUser } from '../modules/user';
-import { add as addFlash } from '../modules/flashes';
+import { load as loadUser } from '../modules/user';
+import { load as loadFlashes } from '../modules/flashes';
 
 import Flashes from './Flashes';
 
@@ -96,22 +96,11 @@ Layout.propTypes = {
 };
 
 export default asyncConnect([{
-  promise: ({ store: { dispatch }, helpers: { apiClient } }) => {
-    if (!__CLIENT__) {
-      const req = apiClient.getServerReq();
-      const flashes = req.flash();
-
-      dispatch(setUser(req.user));
-
-      Object.keys(flashes).forEach((type) => {
-        flashes[type].forEach((message) => {
-          dispatch(addFlash(type, message));
-        });
-      });
-    }
-
-    return false;
-  }
+  promise: ({ store: { dispatch } }) =>
+    Promise.all(__CLIENT__ ? [] : [
+      dispatch(loadUser()),
+      dispatch(loadFlashes())
+    ])
 }])(connect(state => ({
   user: state.user
 }), {})(Layout));

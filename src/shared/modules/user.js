@@ -4,7 +4,7 @@ const SET = 'universal-react/user/SET';
 export default function (state = {}, action) {
   switch (action.type) {
     case SET:
-      return { ...action.data };
+      return { ...action.result };
 
     default:
       return state;
@@ -12,9 +12,10 @@ export default function (state = {}, action) {
 }
 
 
-export function set(data) {
+export function load() {
   return {
-    type: SET,
-    data
+    types: [null, SET, null],
+    promise: ({ apiClient }) =>
+      Promise.resolve(__CLIENT__ ? {} : apiClient.getServerReq().user)
   };
 }
