@@ -15,7 +15,7 @@ const history = makeHistory(store);
 
 const render = () => {
   const { Root, routes } = require('./root')(store);
-  let forRender = <Root history={history} helpers={{ apiClient }} />;
+  let forRender = <Root history={history} />;
 
   if (__DEV__) {
     const AppContainer = require('react-hot-loader').AppContainer;

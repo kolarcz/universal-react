@@ -27,7 +27,7 @@ export default function (req, res) {
       return res.status(404).end('Not found');
     }
 
-    await loadOnServer({ ...renderProps, store, helpers: { apiClient } });
+    await loadOnServer({ ...renderProps, store });
 
     const root = ReactDOMServer.renderToString(
       <Provider store={store}>
