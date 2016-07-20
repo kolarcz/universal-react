@@ -49,15 +49,23 @@ export default function (CONFIG, sockets) {
     passwordField: 'password',
     passReqToCallback: true
   }, async (req, username, password, done) => {
-    const user = await users.setLocalUser(username, password);
-    done(null, user);
+    if (!username.length || !password.length || username.match(/([^a-z0-9.]|^\.|\.$|\.\.)/)) {
+      done(null, false, { message: 'Login can\'t be created' });
+    } else {
+      const user = await users.setLocalUser(username, password);
+      if (user) {
+        done(null, user, { message: 'Logged in' });
+      } else {
+        done(null, false, { message: 'Username already exists' });
+      }
+    }
   }));
 
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/',
-    successFlash: 'Logged in',
+    successFlash: true,
     failureRedirect: '/signup',
-    failureFlash: 'Username already exists'
+    failureFlash: true
   }));
 
 

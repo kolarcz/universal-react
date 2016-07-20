@@ -7,11 +7,19 @@ const validate = values => {
 
   if (!values.username) {
     errors.username = 'Required';
+  } else if (values.username.match(/[^a-z0-9.]/i)) {
+    errors.username = 'Allowed only letters (a-z), numbers and dots';
+  } else if (values.username.match(/(^\.|\.$)/)) {
+    errors.username = 'Dots can\'t be at the beginning or the end';
+  } else if (values.username.match(/\.\./)) {
+    errors.username = 'There can\'t be multiple dots between themselves';
   }
   if (!values.password) {
     errors.password = 'Required';
   }
-  if (values.password !== values.password2) {
+  if (!values.password2) {
+    errors.password2 = 'Required';
+  } else if (values.password !== values.password2) {
     errors.password2 = 'Passwords not match';
   }
 
