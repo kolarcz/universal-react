@@ -8,6 +8,7 @@ import { load as loadUser } from '../modules/user';
 import { load as loadFlashes } from '../modules/flashes';
 
 import Flashes from './Flashes';
+import Loading from './Loading';
 
 const Link = activeComponent('li');
 
@@ -34,6 +35,8 @@ const Layout = ({ children, user }) => {
         link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
         titleTemplate="%s | Universal React"
       />
+
+      <Loading />
 
       <header className="navbar navbar-default navbar-fixed-top">
         <div className="container">

@@ -1,0 +1,32 @@
+@-webkit-keyframes loadingMove {
+  from {background-position: 0px;}
+  to {background-position: 400px;}
+}
+
+@keyframes loadingMove {
+  from {background-position: 0px;}
+  to {background-position: 400px;}
+}
+
+.loading {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #3690f0;
+  background-image: linear-gradient(to right, #3690f0 0%,#a2c7ec 50%,#3690f0 100%);
+  background-size: 400px;
+  -webkit-animation: loadingMove linear 1s infinite;
+  animation: loadingMove linear 1s infinite;
+  -webkit-transition: all .4s .2s;
+  transition: all .4s .2s;
+
+  &.none {
+    -webkit-transition: all .4s 0s;
+    transition: all .4s 0s;
+    margin-top: -3px;
+    opacity: 0;
+  }
+}
