@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import { reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 
 const validate = values => {
   const errors = {};
@@ -26,63 +26,38 @@ const validate = values => {
   return errors;
 };
 
-const Signup = ({ fields: { username, password, password2 }, submitting, invalid }) => (
+const renderField = field => (
+  <div className={`form-group${(field.touched && field.error ? ' has-error' : '')}`}>
+    <div className="col-sm-6 col-md-5 col-lg-4">
+      <input className="form-control" {...field.input} />
+    </div>
+    <div className="col-sm-6 col-md-5 col-lg-4">
+      {field.touched && field.error && <div className="help-block">{field.error}</div>}
+    </div>
+  </div>
+);
+
+const Signup = ({ submitting, pristine, invalid }) => (
   <div>
     <Helmet title="Sign up" />
     <h1>Sign up</h1>
 
     <form className="form-horizontal" id="form" method="post" action="/signup">
-      <div className={`form-group${(username.touched && username.error ? ' has-error' : '')}`}>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          <input
-            type="text"
-            name="username"
-            className="form-control"
-            placeholder="Username"
-            {...username}
-          />
-        </div>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          {username.touched && username.error && <div className="help-block">{username.error}</div>}
-        </div>
-      </div>
-      <div className={`form-group${(password.touched && password.error ? ' has-error' : '')}`}>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          <input
-            type="password"
-            name="password"
-            className="form-control"
-            placeholder="Password"
-            {...password}
-          />
-        </div>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          {password.touched && password.error && <div className="help-block">{password.error}</div>}
-        </div>
-      </div>
-      <div className={`form-group${(password2.touched && password2.error ? ' has-error' : '')}`}>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          <input
-            type="password"
-            className="form-control"
-            placeholder="Password again"
-            {...password2}
-          />
-        </div>
-        <div className="col-sm-6 col-md-5 col-lg-4">
-          {
-            password2.touched &&
-            password2.error &&
-              <div className="help-block">{password2.error}</div>
-          }
-        </div>
-      </div>
+      <Field name="username" type="text" placeholder="Username" component={renderField} />
+      <Field name="password" type="password" placeholder="Password" component={renderField} />
+      <Field
+        name="password2"
+        type="password"
+        placeholder="Password again"
+        component={renderField}
+      />
+
       <div className="form-group">
         <div className="col-xs-6 col-sm-3 col-md-3 col-lg-2">
           <button
             type="submit"
             className="btn btn-success btn-block"
-            disabled={submitting || invalid}
+            disabled={submitting || pristine || (!pristine && invalid)}
           >
             Sign up
           </button>
@@ -103,8 +78,8 @@ const Signup = ({ fields: { username, password, password2 }, submitting, invalid
 
 
 Signup.propTypes = {
-  fields: PropTypes.object.isRequired,
   submitting: PropTypes.bool.isRequired,
+  pristine: PropTypes.bool.isRequired,
   invalid: PropTypes.bool.isRequired
 };
 
