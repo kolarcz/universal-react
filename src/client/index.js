@@ -14,7 +14,7 @@ const store = makeStore(apiClient, window.$STATE);
 const history = makeHistory(store);
 
 const render = () => {
-  const { Root, routes } = require('./root')(store);
+  const { Root, routes } = require('./root').default(store);
   let forRender = <Root history={history} />;
 
   if (__DEV__) {

@@ -37,7 +37,7 @@ function makeStore(apiClient, initialState) {
 
   if (module.hot) {
     module.hot.accept('./modules/index', () =>
-      reducerRegistry.register(require('./modules/index'))
+      reducerRegistry.register(require('./modules/index').default)
     );
   }
 

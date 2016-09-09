@@ -7,6 +7,7 @@
     "postinstall": "npm run build",
     "gencerts": "openssl req -x509 -newkey rsa:2048 -keyout ./certs/server.key -out ./certs/server.crt -days 36525 -subj \"/O=-\" -nodes",
     "lint": "node_modules/.bin/eslint --ext=.js,.jsx run.js src webpack || echo done",
+    "flow": "node_modules/.bin/flow || echo done",
     "start:dev": "node run.js --server=development",
     "start": "node run.js --server=production",
     "build": "node run.js --build"
@@ -26,7 +27,6 @@
   "homepage": "https://github.com/kolarcz/universal-react#readme",
   "dependencies": {
     "babel-loader": "6.2.4",
-    "babel-plugin-add-module-exports": "0.2.1",
     "babel-plugin-transform-async-to-generator": "6.8.0",
     "babel-plugin-transform-object-rest-spread": "6.8.0",
     "babel-plugin-transform-runtime": "6.9.0",
@@ -83,12 +83,13 @@
   },
   "devDependencies": {
     "babel-eslint": "6.1.2",
+    "empty-string": "1.1.1",
     "eslint": "2.13.1",
     "eslint-config-airbnb": "9.0.1",
-    "eslint-loader": "1.4.1",
     "eslint-plugin-import": "1.11.0",
     "eslint-plugin-jsx-a11y": "1.5.5",
     "eslint-plugin-react": "5.2.2",
+    "flow-bin": "0.32.0",
     "minimatch": "3.0.2",
     "react-hot-loader": "3.0.0-beta.2",
     "redux-devtools": "3.3.1",

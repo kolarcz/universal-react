@@ -59,7 +59,7 @@ app.use(bodyParser.json());
 
 const sockets = socketIo(httpsServer || httpServer);
 sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
-app.use(require('./routes')(CONFIG, sockets));
+app.use(require('./routes').default(CONFIG, sockets));
 
 
 if (__DEV__) {
@@ -99,7 +99,7 @@ global.webpackIsomorphicTools
   .development(__DEV__)
   .server(basePath, () => {
     app.get('*', (req, res) => {
-      require('./renderer')(req, res);
+      require('./renderer').default(req, res);
     });
   });
 

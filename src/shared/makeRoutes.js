@@ -42,7 +42,7 @@ const makeRoutes = store => {
             }
 
             store.registerReducers({ todos: require('./modules/todos').default });
-            cb(null, require('./containers/Todos'));
+            cb(null, require('./containers/Todos').default);
           });
         }}
       />
