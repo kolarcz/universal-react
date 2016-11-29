@@ -1,3 +1,5 @@
 import Sequelize from 'sequelize';
 
-export default new Sequelize(process.env.DATABASE);
+const sequelize = new Sequelize(process.env.DATABASE, {
+  logging: __DEV__ && console.log
+});
