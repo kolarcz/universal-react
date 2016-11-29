@@ -34,7 +34,10 @@ const Flashes = ({ flashes, deleteFlash }) => (
 );
 
 Flashes.propTypes = {
-  flashes: PropTypes.array.isRequired,
+  flashes: PropTypes.arrayOf(PropTypes.shape({
+    type: PropTypes.oneOf(['success', 'error']).isRequired,
+    message: PropTypes.string.isRequired
+  })).isRequired,
   deleteFlash: PropTypes.func.isRequired
 };
 

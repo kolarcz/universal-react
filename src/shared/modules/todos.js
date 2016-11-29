@@ -15,7 +15,7 @@ export default function (state = {}, action) {
 
     case DELETE: {
       const newState = {};
-      Object.keys(state).filter(id => (id !== action.result.id)).forEach(id => {
+      Object.keys(state).filter(id => (id !== action.result.id)).forEach((id) => {
         newState[id] = state[id];
       });
       return newState;

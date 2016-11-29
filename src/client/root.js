@@ -12,7 +12,7 @@ export default function (store) {
     <Provider store={store}>
       <Router
         history={history}
-        render={(props) => (<ReduxAsyncConnect {...props} helpers={helpers} />)}
+        render={props => <ReduxAsyncConnect {...props} helpers={helpers} />}
       >
         {routes}
       </Router>

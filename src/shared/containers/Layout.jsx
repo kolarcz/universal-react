@@ -48,9 +48,9 @@ const Layout = ({ children, user }) => (
             data-toggle="collapse"
             data-target="#bs-navbar"
           >
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
-            <span className="icon-bar"></span>
+            <span className="icon-bar" />
+            <span className="icon-bar" />
+            <span className="icon-bar" />
           </button>
           <span className="navbar-brand">
             <i className="fa fa-cube fa-lg" /> Universal React
@@ -94,8 +94,14 @@ const Layout = ({ children, user }) => (
 );
 
 Layout.propTypes = {
-  children: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    photo: PropTypes.string
+  }).isRequired
 };
 
 export default asyncConnect([{

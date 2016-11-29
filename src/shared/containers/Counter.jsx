@@ -19,13 +19,13 @@ const Counter = ({ counter, increase, increaseAsync, decrease }) => (
         <div className="col-sm-12">
           <div className="btn-group" role="group">
             <button className="btn btn-success" onClick={increase}>
-              <span className="glyphicon glyphicon-plus"></span>
+              <span className="glyphicon glyphicon-plus" />
             </button>
             <button className="btn btn-warning" onClick={decrease}>
-              <span className="glyphicon glyphicon-minus"></span>
+              <span className="glyphicon glyphicon-minus" />
             </button>
             <button className="btn btn-danger" onClick={increaseAsync}>
-              <span className="glyphicon glyphicon-plus"></span> Async
+              <span className="glyphicon glyphicon-plus" /> Async
             </button>
           </div>
         </div>

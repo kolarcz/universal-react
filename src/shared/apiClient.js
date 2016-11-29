@@ -3,7 +3,7 @@ import superagent from 'superagent';
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 function formatUrl(path, req) {
-  const adjustedPath = path[0] !== '/' ? '/${path}' : path;
+  const adjustedPath = path[0] !== '/' ? `/${path}` : path;
   if (!__CLIENT__ && req) {
     return `${req.protocol}://${req.get('host')}${adjustedPath}`;
   }

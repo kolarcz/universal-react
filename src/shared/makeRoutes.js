@@ -13,7 +13,7 @@ if (typeof require.ensure !== 'function') {
   require.ensure = (d, c) => c(require);
 }
 
-const makeRoutes = store => {
+const makeRoutes = (store) => {
   const requireLoggedOut = async (nextState, replace, cb) => {
     if (!__CLIENT__) {
       await store.dispatch(loadUser());
@@ -34,7 +34,7 @@ const makeRoutes = store => {
       <Route
         path="/todos"
         getComponent={(location, cb) => {
-          require.ensure([], require => {
+          require.ensure([], (require) => {
             if (module.hot) {
               module.hot.accept('./modules/todos', () =>
                 store.registerReducers({ todos: require('./modules/todos').default })

@@ -6,7 +6,7 @@ const Todo = ({ text, completed, markTodo, deleteTodo }) => {
   return (
     <li className="list-group-item">
       <button className="btn btn-danger btn-xs" style={{ float: 'right' }} onClick={deleteTodo}>
-        <span className="glyphicon glyphicon-trash"></span>
+        <span className="glyphicon glyphicon-trash" />
       </button>
       <label style={{ marginBottom: '0px', fontWeight: 'normal', ...labelStyle }}>
         <input checked={completed} type="checkbox" onChange={markTodo} />

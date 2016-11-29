@@ -7,8 +7,8 @@ class ReducerRegistry {
     this._listener = null;
 
     if (typeof initialState === 'object') {
-      Object.keys(initialState).forEach(key => {
-        if (!this._reducers.hasOwnProperty(key)) {
+      Object.keys(initialState).forEach((key) => {
+        if (!{}.hasOwnProperty.call(this._reducers, key)) {
           this._reducers[key] = (state = null) => state;
         }
       });

@@ -18,7 +18,7 @@ export function increase() {
 }
 
 export function increaseAsync() {
-  return dispatch => {
+  return (dispatch) => {
     setTimeout(() => {
       dispatch(increase());
     }, 500);

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { Field, reduxForm, propTypes as reduxFormPropTypes } from 'redux-form';
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
 
   if (!values.username) {
@@ -72,11 +72,11 @@ const Signup = ({ submitting, pristine, invalid }) => (
         </div>
         <div className="col-xs-6 col-sm-3 col-md-2 col-lg-2">
           <a className="btn btn-default" href="/auth/facebook">
-            <i className="fa fa-lg fa-facebook-square"></i>
+            <i className="fa fa-lg fa-facebook-square" />
           </a>
           {'   '}
           <a className="btn btn-default" href="/auth/google">
-            <i className="fa fa-lg fa-google"></i>
+            <i className="fa fa-lg fa-google" />
           </a>
         </div>
       </div>

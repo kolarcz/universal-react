@@ -43,7 +43,7 @@ export function del(i) {
 export function load() {
   return {
     types: [null, SET, null],
-    promise: ({ apiClient }) => new Promise(resolve => {
+    promise: ({ apiClient }) => new Promise((resolve) => {
       if (__CLIENT__) {
         resolve([]);
       } else {

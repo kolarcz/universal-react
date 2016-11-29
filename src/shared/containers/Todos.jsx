@@ -67,7 +67,7 @@ class Todos extends Component {
                 <input name="text" className="form-control" />
                 <span className="input-group-btn">
                   <button className="btn btn-primary" type="submit">
-                    <span className="glyphicon glyphicon-plus"></span> Add todo
+                    <span className="glyphicon glyphicon-plus" /> Add todo
                   </button>
                 </span>
               </div>
@@ -76,13 +76,13 @@ class Todos extends Component {
           <div className="form-group">
             <div className="col-sm-6">
               <ul className="list-group">
-                {Object.keys(todos).map((id) => (
+                {Object.keys(todos).map(id => (
                   <Todo
                     key={id}
                     text={todos[id].text}
                     completed={todos[id].completed}
                     markTodo={() => markTodoEvent(id, !todos[id].completed)}
-                    deleteTodo={(e) => deleteTodoEvent(id, e)}
+                    deleteTodo={e => deleteTodoEvent(id, e)}
                   />
                 ))}
               </ul>

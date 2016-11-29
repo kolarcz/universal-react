@@ -24,7 +24,7 @@ const actionPromiseBegin = () => ({ type: BEGIN });
 const actionPromiseEnd = () => ({ type: END });
 
 export default function apiClientMiddleware(apiClient) {
-  return ({ dispatch, getState }) => (next) => (action) => {
+  return ({ dispatch, getState }) => next => (action) => {
     // redux-thunk
     if (typeof action === 'function') {
       return action(dispatch, getState);

@@ -1,3 +1,5 @@
+/* eslint-disable react/no-danger */
+
 import { match } from 'react-router';
 import ReactDOMServer from 'react-dom/server';
 import Helmet from 'react-helmet';
@@ -40,7 +42,7 @@ export default function (req, res) {
 
     const stringifiedState = JSON.stringify(store.getState());
     const content = `<!DOCTYPE html>${ReactDOMServer.renderToString(
-      <html {...helmet.htmlAttributes.toComponent()}>
+      <html lang="en" {...helmet.htmlAttributes.toComponent()}>
         <head>
           <meta charSet="utf8" />
           <meta
@@ -57,10 +59,8 @@ export default function (req, res) {
           {helmet.script.toComponent()}
         </head>
         <body>
-          <div id="root" dangerouslySetInnerHTML={{ __html: root }}></div>
-          <script
-            dangerouslySetInnerHTML={{ __html: `window.$STATE=${stringifiedState};` }}
-          ></script>
+          <div id="root" dangerouslySetInnerHTML={{ __html: root }} />
+          <script dangerouslySetInnerHTML={{ __html: `window.$STATE=${stringifiedState};` }} />
           {Object.keys(assets.javascript).map((key, i) =>
             <script src={assets.javascript[key]} key={i} />
           )}

@@ -83,7 +83,7 @@ if (__DEV__) {
     minimatch.match(
       Object.keys(require.cache),
       `${basePath}/src/{shared/**,server/renderer.js}`
-    ).forEach(modulePath => {
+    ).forEach((modulePath) => {
       delete require.cache[modulePath];
     });
   });

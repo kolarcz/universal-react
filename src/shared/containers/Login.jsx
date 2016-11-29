@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { Field, reduxForm, propTypes as reduxFormPropTypes } from 'redux-form';
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
 
   if (!values.username) {
@@ -56,17 +56,17 @@ const Login = ({ submitting, pristine, invalid }) => (
         </div>
         <div className="col-xs-6 col-sm-3 col-md-2 col-lg-2">
           <a className="btn btn-default" href="/auth/facebook">
-            <i className="fa fa-lg fa-facebook-square"></i>
+            <i className="fa fa-lg fa-facebook-square" />
           </a>
           {'   '}
           <a className="btn btn-default" href="/auth/google">
-            <i className="fa fa-lg fa-google"></i>
+            <i className="fa fa-lg fa-google" />
           </a>
         </div>
       </div>
       <div className="form-group">
         <div className="col-lg-12">
-          You don't have an account? <Link to="/signup">Sign up</Link>
+          You don&apos;t have an account? <Link to="/signup">Sign up</Link>
         </div>
       </div>
     </form>

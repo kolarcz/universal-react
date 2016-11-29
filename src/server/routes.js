@@ -22,7 +22,7 @@ export default function (CONFIG, sockets) {
   app.use((req, res, next) => {
     req.user = req.user || {};
     res.emitToUser = (userId, ...args) => {
-      Object.keys(sockets.sockets.connected).forEach(key => {
+      Object.keys(sockets.sockets.connected).forEach((key) => {
         const socket = sockets.sockets.connected[key];
         const socketUserId = socket.request.user && socket.request.user.id;
         if (socketUserId === userId) {
@@ -31,7 +31,7 @@ export default function (CONFIG, sockets) {
       });
     };
     res.emitToAll = (...args) => {
-      Object.keys(sockets.sockets.connected).forEach(key => {
+      Object.keys(sockets.sockets.connected).forEach((key) => {
         sockets.sockets.connected[key].emit(...args);
       });
     };
