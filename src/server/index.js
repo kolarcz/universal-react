@@ -23,7 +23,7 @@ const httpsServer = CONFIG.PORT_SECURE ? spdy.createServer({
   cert: fs.readFileSync(`${basePath}/${CONFIG.FILE_CRT}`)
 }, app) : null;
 
-const listen = () => {
+const startListen = () => {
   if (CONFIG.PORT_SECURE) {
     httpsServer.listen(CONFIG.PORT_SECURE, (err) => {
       console.log(`HTTPS at port ${CONFIG.PORT_SECURE}:`, err || 'started');
@@ -59,8 +59,10 @@ app.use(bodyParser.json());
 
 const sockets = socketIo(httpsServer || httpServer);
 sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
-app.use(require('./routes').default(CONFIG, sockets));
 
+const loadRoutes = () => {
+  app.use(require('./routes').default(CONFIG, sockets, startListen));
+};
 
 if (__DEV__) {
   const webpack = require('webpack');
@@ -74,7 +76,7 @@ if (__DEV__) {
     noInfo: true
   });
 
-  webpackDevMiddleware.waitUntilValid(listen);
+  webpackDevMiddleware.waitUntilValid(loadRoutes);
 
   app.use(webpackHotMiddleware);
   app.use(webpackDevMiddleware);
@@ -103,5 +105,5 @@ global.webpackIsomorphicTools
   });
 
 if (!__DEV__) {
-  listen();
+  loadRoutes();
 }

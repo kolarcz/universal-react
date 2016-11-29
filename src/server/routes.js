@@ -4,11 +4,9 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import users from './db/users.model';
-import todos from './db/todos.model';
+import { users, todos, isReady } from './db';
 
-
-export default function (CONFIG, sockets) {
+export default function (CONFIG, sockets, readyCallback) {
   const app = express.Router(); // eslint-disable-line new-cap
 
   passport.serializeUser((user, done) => done(null, user.id));
@@ -175,6 +173,8 @@ export default function (CONFIG, sockets) {
     res.emitToUser(req.user.id, 'deleteTodo', todo.id);
   });
 
+
+  isReady.then(readyCallback);
 
   return app;
 }
