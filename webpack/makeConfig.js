@@ -48,15 +48,16 @@ module.exports = (ENV) => {
     module: {
       loaders: [{
         test: /\.jsx?$/,
-        loader: `babel-loader?${JSON.stringify({
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
           presets: ['react', 'es2015'],
           plugins: [
             ['transform-runtime', { polyfill: false, regenerator: true }],
             'transform-object-rest-spread',
             'transform-async-to-generator'
           ].concat(isDEV ? 'react-hot-loader/babel' : [])
-        })}`,
-        exclude: /node_modules/
+        }
       }, {
         test: /\.css$/,
         exclude: /node_modules/,
