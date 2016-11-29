@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import './Loading.scss';
+import css from './Loading.scss';
 
 const Layout = ({ reduxAsyncConnect, apiClientMiddleware }) => (
   <div
     className={
-      `loading${reduxAsyncConnect.loaded && apiClientMiddleware.loaded ? ' none' : ''}`
+      `${css.loading}${reduxAsyncConnect.loaded && apiClientMiddleware.loaded ? ` ${css.none}` : ''}`
     }
   />
 );

@@ -1,4 +1,4 @@
-@-webkit-keyframes alert-show {
+@keyframes alertShow {
   from {
     opacity: 0;
   }
@@ -7,27 +7,7 @@
   }
 }
 
-@-webkit-keyframes alert-hide {
-  from {
-    opacity: 1;
-    margin-top: 0px;
-  }
-  to {
-    opacity: 0;
-    margin-top: -52px;
-  }
-}
-
-@keyframes alert-show {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes alert-hide {
+@keyframes alertHide {
   from {
     opacity: 1;
     margin-top: 0px;
@@ -38,32 +18,28 @@
   }
 }
 
-body {
-  .flashes {
-    position: fixed;
-    top: 69px;
-    left: 0px;
-    right: 0px;
-    z-index: 1000;
+.flashes {
+  position: fixed;
+  top: 69px;
+  left: 0px;
+  right: 0px;
+  z-index: 1000;
 
-    .row {
-      position: relative;
+  .row {
+    position: relative;
 
-      .col-sm-5 {
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
+    .col {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
 
-        .alert {
-          margin-bottom: 10px;
-          -webkit-animation: alert-show .5s forwards;
-          animation: alert-show .5s forwards;
+      .alert {
+        margin-bottom: 10px;
+        animation: alertShow .5s forwards;
 
-          &.alert-leave {
-            -webkit-animation: alert-hide .5s forwards;
-            animation: alert-hide .5s forwards;
-          }
+        &.alertLeave {
+          animation: alertHide .5s forwards;
         }
       }
     }

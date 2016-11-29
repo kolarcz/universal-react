@@ -2,6 +2,7 @@ import ProgressBarPlugin from 'progress-bar-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WebpackIsomorphicToolsPlugin from 'webpack-isomorphic-tools/plugin';
 import webpack from 'webpack';
+import autoprefixer from 'autoprefixer';
 
 module.exports = (ENV) => {
   const isDEV = (ENV === 'development');
@@ -58,11 +59,25 @@ module.exports = (ENV) => {
         exclude: /node_modules/
       }, {
         test: /\.css$/,
+        exclude: /node_modules/,
+        loader: isDEV
+          ? 'style-loader!css-loader?modules&sourceMap&localIdentName=[hash:base64:6]!postcss-loader'
+          : ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[hash:base64:6]!postcss-loader')
+      }, {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        loader: isDEV
+          ? 'style-loader!css-loader?modules&sourceMap&localIdentName=[hash:base64:6]!postcss-loader!sass-loader'
+          : ExtractTextPlugin.extract('style-loader', 'css-loader?modules&localIdentName=[hash:base64:6]!postcss-loader!sass-loader')
+      }, {
+        test: /\.css$/,
+        include: /node_modules/,
         loader: isDEV
           ? 'style-loader!css-loader'
           : ExtractTextPlugin.extract('style-loader', 'css-loader')
       }, {
         test: /\.scss$/,
+        include: /node_modules/,
         loader: isDEV
           ? 'style-loader!css-loader!sass-loader'
           : ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
@@ -76,6 +91,7 @@ module.exports = (ENV) => {
         test: /\.ico(\?.*)?$/,
         loader: 'url-loader?name=[hash:8].[ext]&limit=1'
       }]
-    }
+    },
+    postcss: [autoprefixer({ browsers: ['last 2 version'] })],
   };
 };

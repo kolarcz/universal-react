@@ -4,17 +4,21 @@ import { connect } from 'react-redux';
 
 import { del as deleteFlash } from '../modules/flashes';
 
-import './Flashes.scss';
+import css from './Flashes.scss';
 
 import Flash from './Flash';
 
 const Flashes = ({ flashes, deleteFlash }) => (
-  <div className="flashes">
+  <div className={css.flashes}>
     <div className="container">
-      <div className="row">
-        <div className="col-sm-5 col-sm-offset-7">
+      <div className={`row ${css.row}`}>
+        <div className={`col-sm-5 col-sm-offset-7 ${css.col}`}>
           <CSSTransitionGroup
-            transitionName="alert"
+            transitionName={{
+              enter: css.alert,
+              active: css.alert,
+              leave: `${css.alert} ${css.alertLeave}`
+            }}
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}
           >
