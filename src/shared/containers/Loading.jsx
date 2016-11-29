@@ -12,8 +12,12 @@ const Layout = ({ reduxAsyncConnect, apiClientMiddleware }) => (
 );
 
 Layout.propTypes = {
-  reduxAsyncConnect: PropTypes.object.isRequired,
-  apiClientMiddleware: PropTypes.object.isRequired
+  reduxAsyncConnect: PropTypes.shape({
+    loaded: PropTypes.bool.isRequired
+  }).isRequired,
+  apiClientMiddleware: PropTypes.shape({
+    loaded: PropTypes.bool.isRequired
+  }).isRequired
 };
 
 export default connect(state => ({
