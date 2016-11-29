@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import activeComponent from 'react-router-active-component';
 import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 import { load as loadUser } from '../modules/user';
 import { load as loadFlashes } from '../modules/flashes';
@@ -10,88 +13,85 @@ import { load as loadFlashes } from '../modules/flashes';
 import Flashes from './Flashes';
 import Loading from './Loading';
 
-const Link = activeComponent('li');
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'font-awesome/css/font-awesome.min.css';
-
 import './Layout.scss';
 
+const NavLink = withRouter(({ router, to, onlyActiveOnIndex, children }) => (
+  <li className={router.isActive(to, onlyActiveOnIndex) ? 'active' : ''}>
+    <Link to={to} data-toggle="collapse" data-target=".navbar-collapse.in">{children}</Link>
+  </li>
+));
+
 if (__CLIENT__) {
-  require('script!jquery/dist/jquery.min.js');
-  require('script!bootstrap/dist/js/bootstrap.min.js');
+  const jQuery = require('jquery/dist/jquery.min.js');
+  global.jQuery = jQuery;
+  global.$ = jQuery;
+
+  require('bootstrap/dist/js/bootstrap.min.js');
 }
 
-const Layout = ({ children, user }) => {
-  const addLinkProps = {
-    'data-toggle': 'collapse',
-    'data-target': '.navbar-collapse.in'
-  };
+const Layout = ({ children, user }) => (
+  <div>
+    <Helmet
+      htmlAttributes={{ lang: 'en' }}
+      link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
+      titleTemplate="%s | Universal React"
+    />
 
-  return (
-    <div>
-      <Helmet
-        htmlAttributes={{ lang: 'en' }}
-        link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
-        titleTemplate="%s | Universal React"
-      />
+    <Loading />
 
-      <Loading />
-
-      <header className="navbar navbar-default navbar-fixed-top">
-        <div className="container">
-          <div className="navbar-header">
-            <button
-              className="navbar-toggle collapsed"
-              type="button"
-              data-toggle="collapse"
-              data-target="#bs-navbar"
-            >
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <span className="navbar-brand">
-              <i className="fa fa-cube fa-lg" /> Universal React
-            </span>
-          </div>
-          <nav id="bs-navbar" className="collapse navbar-collapse">
-            <ul className="nav navbar-nav">
-              <Link {...addLinkProps} to="/" onlyActiveOnIndex>Home</Link>
-              <Link {...addLinkProps} to="/counter">Counter</Link>
-              <Link {...addLinkProps} to="/todos">Todos</Link>
-            </ul>
-            <ul className="nav navbar-nav navbar-right">
-              {user.name ? (
-                <li>
-                  <a href="/logout">
-                    <i className="fa fa-sign-out fa-lg" /> Log out
-                  </a>
-                </li>
-              ) : (
-                <Link {...addLinkProps} to="/login">
-                  <i className="fa fa-sign-in fa-lg" /> Log in
-                </Link>
-              )}
-            </ul>
-            {user.name ? (
-              <p className="navbar-text navbar-right">
-                <span className="photo-icon" style={{ backgroundImage: `url('${user.photo}')` }} />
-                Signed in as <strong>{user.name}</strong>
-              </p>
-            ) : null}
-          </nav>
-        </div>
-      </header>
-
-      <Flashes />
-
+    <header className="navbar navbar-default navbar-fixed-top">
       <div className="container">
-        {children}
+        <div className="navbar-header">
+          <button
+            className="navbar-toggle collapsed"
+            type="button"
+            data-toggle="collapse"
+            data-target="#bs-navbar"
+          >
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+            <span className="icon-bar"></span>
+          </button>
+          <span className="navbar-brand">
+            <i className="fa fa-cube fa-lg" /> Universal React
+          </span>
+        </div>
+        <nav id="bs-navbar" className="collapse navbar-collapse">
+          <ul className="nav navbar-nav">
+            <NavLink to="/" onlyActiveOnIndex>Home</NavLink>
+            <NavLink to="/counter">Counter</NavLink>
+            <NavLink to="/todos">Todos</NavLink>
+          </ul>
+          <ul className="nav navbar-nav navbar-right">
+            {user.name ? (
+              <li>
+                <a href="/logout">
+                  <i className="fa fa-sign-out fa-lg" /> Log out
+                </a>
+              </li>
+            ) : (
+              <NavLink to="/login">
+                <i className="fa fa-sign-in fa-lg" /> Log in
+              </NavLink>
+            )}
+          </ul>
+          {user.name ? (
+            <p className="navbar-text navbar-right">
+              <span className="photo-icon" style={{ backgroundImage: `url('${user.photo}')` }} />
+              Signed in as <strong>{user.name}</strong>
+            </p>
+          ) : null}
+        </nav>
       </div>
+    </header>
+
+    <Flashes />
+
+    <div className="container">
+      {children}
     </div>
-  );
-};
+  </div>
+);
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,

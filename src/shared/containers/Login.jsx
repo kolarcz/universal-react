@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, propTypes as reduxFormPropTypes } from 'redux-form';
 
 const validate = values => {
   const errors = {};
@@ -16,16 +16,24 @@ const validate = values => {
   return errors;
 };
 
-const renderField = field => (
-  <div className={`form-group${(field.touched && field.error ? ' has-error' : '')}`}>
+const renderField = ({ input, meta: { touched, error } }) => (
+  <div className={`form-group${(touched && error ? ' has-error' : '')}`}>
     <div className="col-sm-6 col-md-5 col-lg-4">
-      <input className="form-control" {...field.input} />
+      <input className="form-control" {...input} />
     </div>
     <div className="col-sm-6 col-md-5 col-lg-4">
-      {field.touched && field.error && <div className="help-block">{field.error}</div>}
+      {touched && error && <div className="help-block">{error}</div>}
     </div>
   </div>
 );
+
+renderField.propTypes = {
+  input: PropTypes.any.isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool.isRequired,
+    error: PropTypes.bool.isRequired
+  }).isRequired
+};
 
 const Login = ({ submitting, pristine, invalid }) => (
   <div>
@@ -66,9 +74,7 @@ const Login = ({ submitting, pristine, invalid }) => (
 );
 
 Login.propTypes = {
-  submitting: PropTypes.bool.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  invalid: PropTypes.bool.isRequired
+  ...reduxFormPropTypes
 };
 
 export default reduxForm({

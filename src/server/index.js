@@ -96,7 +96,6 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools
-  .development(__DEV__)
   .server(basePath, () => {
     app.get('*', (req, res) => {
       require('./renderer').default(req, res);
