@@ -17,7 +17,7 @@ const Flashes = ({ flashes, deleteFlash }) => (
             transitionName={{
               enter: css.alert,
               active: css.alert,
-              leave: `${css.alert} ${css.alertLeave}`
+              leave: css.alertLeave
             }}
             transitionEnterTimeout={500}
             transitionLeaveTimeout={500}

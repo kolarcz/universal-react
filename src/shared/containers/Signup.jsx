@@ -26,10 +26,10 @@ const validate = (values) => {
   return errors;
 };
 
-const renderField = ({ input, meta: { touched, error } }) => (
+const renderField = ({ input, meta: { touched, error }, ...rest }) => (
   <div className={`form-group${(touched && error ? ' has-error' : '')}`}>
     <div className="col-sm-6 col-md-5 col-lg-4">
-      <input className="form-control" {...input} />
+      <input className="form-control" {...input} {...rest} />
     </div>
     <div className="col-sm-6 col-md-5 col-lg-4">
       {touched && error && <div className="help-block">{error}</div>}
@@ -41,7 +41,7 @@ renderField.propTypes = {
   input: PropTypes.any.isRequired,
   meta: PropTypes.shape({
     touched: PropTypes.bool.isRequired,
-    error: PropTypes.bool.isRequired
+    error: PropTypes.string
   }).isRequired
 };
 

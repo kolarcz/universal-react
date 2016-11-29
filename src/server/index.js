@@ -62,6 +62,15 @@ sockets.use((socket, next) => sessionMiddleware(socket.request, {}, next));
 
 const loadRoutes = () => {
   app.use(require('./routes').default(CONFIG, sockets, startListen));
+
+  app.use('/', express.static(`${basePath}/dist`));
+
+  global.webpackIsomorphicTools
+    .server(basePath, () => {
+      app.get('*', (req, res) => {
+        require('./renderer').default(req, res);
+      });
+    });
 };
 
 if (__DEV__) {
@@ -91,18 +100,9 @@ if (__DEV__) {
   });
 }
 
-app.use('/', express.static(`${basePath}/dist`));
-
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(
   require('../../webpack/makeAssets')(__ENV__)
 );
-
-global.webpackIsomorphicTools
-  .server(basePath, () => {
-    app.get('*', (req, res) => {
-      require('./renderer').default(req, res);
-    });
-  });
 
 if (!__DEV__) {
   loadRoutes();

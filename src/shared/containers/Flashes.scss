@@ -37,10 +37,11 @@
       .alert {
         margin-bottom: 10px;
         animation: alertShow .5s forwards;
+      }
 
-        &.alertLeave {
-          animation: alertHide .5s forwards;
-        }
+      .alertLeave {
+        margin-bottom: 10px;
+        animation: alertHide .5s forwards;
       }
     }
   }

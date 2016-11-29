@@ -1,9 +1,7 @@
-import
-import users from './db/users.model';
-import todos from './db/todos.model';
+import sequelize from './sequelize';
 
-const users = new Users(sequelize);
-const todos = new Todos(sequelize);
+import users from './users.model';
+import todos from './todos.model';
 
 const isReady = sequelize.sync();
 
