@@ -26,7 +26,7 @@ module.exports = (ENV) => {
     },
     plugins: [
       new ProgressBarPlugin({
-        format: 'Build :percent   :msg'
+        format: 'Build  :percent   :msg'
       }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV),
@@ -54,7 +54,7 @@ module.exports = (ENV) => {
       })
     ].concat(isDEV ? [
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NamedModulesPlugin()
+      new webpack.NamedModulesPlugin(),
       new webpack.NoEmitOnErrorsPlugin()
     ] : []).concat(
       webpackIsomorphicToolsPlugin
