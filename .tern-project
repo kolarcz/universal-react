@@ -7,7 +7,7 @@
     "**/*.js"
   ],
   "dontLoad": [
-    "node_modules/**/*.js"
+    "node_modules/**"
   ],
   "plugins": {
     "complete_strings": {},

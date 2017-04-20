@@ -3,6 +3,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import WebpackIsomorphicToolsPlugin from 'webpack-isomorphic-tools/plugin';
 import webpack from 'webpack';
 import autoprefixer from 'autoprefixer';
+import path from 'path';
 
 module.exports = (ENV) => {
   const isDEV = (ENV === 'development');
@@ -14,20 +15,19 @@ module.exports = (ENV) => {
     devtool: isDEV ? 'cheap-module-eval-source-map' : false,
     entry: (isDEV ? ['webpack-hot-middleware/client', 'react-hot-loader/patch'] : [])
       .concat([
-        `${__dirname}/../src/client/index.js`
+        path.resolve(__dirname, '../src/client/index.js')
       ]),
-    context: `${__dirname}/../src`,
+    context: path.resolve(__dirname, '..'),
     output: {
       filename: '[hash:8].js',
       chunkFilename: '[hash:8].[id].js',
-      path: `${__dirname}/../dist`,
+      path: path.resolve(__dirname, '../dist'),
       publicPath: '/'
     },
     plugins: [
       new ProgressBarPlugin({
         format: 'Build :percent   :msg'
       }),
-      new webpack.NoEmitOnErrorsPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(ENV),
         __CLIENT__: true,
@@ -55,13 +55,14 @@ module.exports = (ENV) => {
     ].concat(isDEV ? [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin()
+      new webpack.NoEmitOnErrorsPlugin()
     ] : []).concat(
       webpackIsomorphicToolsPlugin
     ),
     resolve: {
       extensions: ['.js', '.jsx'],
       modules: [
-        `${__dirname}/../src`,
+        path.resolve(__dirname, '../src'),
         'node_modules'
       ]
     },
@@ -77,7 +78,7 @@ module.exports = (ENV) => {
               ['env', { modules: false }]
             ],
             plugins: [
-              ['transform-runtime', { polyfill: false, regenerator: true }],
+              ['transform-runtime', { polyfill: false, regenerator: true, helpers: false }],
               'transform-object-rest-spread',
               'transform-class-properties'
             ].concat(isDEV ? 'react-hot-loader/babel' : [])
@@ -86,31 +87,39 @@ module.exports = (ENV) => {
       }, {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [`css-loader?modules${isDEV ? '&sourceMap' : ''}&localIdentName=[hash:base64:8]`, 'postcss-loader']
-        })
+        use: isDEV
+          ? ['style-loader', 'css-loader?modules&sourceMap&localIdentName=[hash:base64:6]', 'postcss-loader']
+          : ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [`css-loader?modules&localIdentName=[hash:base64:8]`, 'postcss-loader']
+          })
       }, {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [`css-loader?modules${isDEV ? '&sourceMap' : ''}&localIdentName=[hash:base64:8]`, 'postcss-loader', 'sass-loader']
-        })
+        use: isDEV
+          ? ['style-loader', 'css-loader?modules&sourceMap&localIdentName=[hash:base64:6]', 'postcss-loader', 'sass-loader']
+          : ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [`css-loader?modules&localIdentName=[hash:base64:8]`, 'postcss-loader', 'sass-loader']
+          })
       }, {
         test: /\.css$/,
         include: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader']
-        })
+        use: isDEV
+          ? ['style-loader', 'css-loader']
+          : ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader']
+          })
       }, {
         test: /\.scss$/,
         include: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
-        })
+        use: isDEV
+          ? ['style-loader', 'css-loader', 'sass-loader']
+          : ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: ['css-loader', 'sass-loader']
+          })
       }, {
         test: /\.(eot|ttf|woff2?)(\?.*)?$/,
         use: 'url-loader?name=[hash:8].[ext]&limit=1'
