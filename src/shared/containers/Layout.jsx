@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
@@ -31,11 +32,10 @@ if (__CLIENT__) {
 
 const Layout = ({ children, user }) => (
   <div>
-    <Helmet
-      htmlAttributes={{ lang: 'en' }}
-      link={[{ rel: 'shortcut icon', href: require('../favicon.ico') }]}
-      titleTemplate="%s | Universal React"
-    />
+    <Helmet titleTemplate="%s | Universal React">
+      <html lang="en" />
+      <link rel="shortcut icon" href={require('../favicon.ico')} />
+    </Helmet>
 
     <Loading />
 

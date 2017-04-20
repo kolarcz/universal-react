@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { Field, reduxForm, propTypes as reduxFormPropTypes } from 'redux-form';
@@ -37,7 +38,10 @@ renderField.propTypes = {
 
 const Login = ({ submitting, pristine, invalid }) => (
   <div>
-    <Helmet title="Log in" />
+    <Helmet>
+      <title>Log in</title>
+    </Helmet>
+
     <h1>Log in</h1>
 
     <form className="form-horizontal" id="form" method="post" action="/login">

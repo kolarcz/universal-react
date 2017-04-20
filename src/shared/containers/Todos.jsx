@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
@@ -57,7 +58,10 @@ class Todos extends Component {
 
     return (
       <div>
-        <Helmet title="Todos" />
+        <Helmet>
+          <title>Todos</title>
+        </Helmet>
+
         <h1>Todos</h1>
 
         <form className="form-horizontal" onSubmit={addTodoEvent}>

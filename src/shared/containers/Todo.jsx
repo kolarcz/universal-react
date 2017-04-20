@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Todo = ({ text, completed, markTodo, deleteTodo }) => {
   const labelStyle = completed ? { color: '#bbb', textDecoration: 'line-through' } : {};

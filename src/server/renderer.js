@@ -38,7 +38,7 @@ export default function (req, res) {
     );
 
     const assets = global.webpackIsomorphicTools.assets();
-    const helmet = Helmet.rewind();
+    const helmet = Helmet.renderStatic();
 
     const stringifiedState = JSON.stringify(store.getState());
     const content = `<!DOCTYPE html>${ReactDOMServer.renderToString(
@@ -52,13 +52,15 @@ export default function (req, res) {
           {Object.keys(assets.styles).map((key, i) =>
             <link rel="stylesheet" type="text/css" href={assets.styles[key]} key={i} />
           )}
-          {helmet.title.toComponent()}
           {helmet.base.toComponent()}
-          {helmet.meta.toComponent()}
           {helmet.link.toComponent()}
+          {helmet.meta.toComponent()}
+          {helmet.noscript.toComponent()}
           {helmet.script.toComponent()}
+          {helmet.style.toComponent()}
+          {helmet.title.toComponent()}
         </head>
-        <body>
+        <body {...helmet.bodyAttributes.toComponent()}>
           <div id="root" dangerouslySetInnerHTML={{ __html: root }} />
           <script dangerouslySetInnerHTML={{ __html: `window.$STATE=${stringifiedState};` }} />
           {Object.keys(assets.javascript).map((key, i) =>

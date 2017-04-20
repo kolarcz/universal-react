@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
@@ -6,8 +7,12 @@ import { add as addFlash } from '../modules/flashes';
 
 const Home = ({ addFlash }) => (
   <div>
-    <Helmet title="Home" />
+    <Helmet>
+      <title>Home</title>
+    </Helmet>
+
     <h1>Home</h1>
+
     <button className="btn btn-success" onClick={() => addFlash('success', 'Success example')}>
       Show success flash
     </button>

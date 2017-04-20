@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
@@ -6,7 +7,10 @@ import { increase, increaseAsync, decrease } from '../modules/counter';
 
 const Counter = ({ counter, increase, increaseAsync, decrease }) => (
   <div>
-    <Helmet title="Counter" />
+    <Helmet>
+      <title>Counter</title>
+    </Helmet>
+
     <h1>Counter</h1>
 
     <div className="form-horizontal">
