@@ -77,6 +77,7 @@ module.exports = (ENV) => {
               ['env', { modules: false }]
             ],
             plugins: [
+              ['transform-runtime', { polyfill: false, regenerator: true }],
               'transform-object-rest-spread',
               'transform-class-properties'
             ].concat(isDEV ? 'react-hot-loader/babel' : [])
