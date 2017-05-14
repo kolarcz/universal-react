@@ -90,13 +90,19 @@ if (__DEV__) {
   app.use(webpackHotMiddleware);
   app.use(webpackDevMiddleware);
 
-  compiler.plugin('done', () => {
+  compiler.plugin('done', (/* stats */) => {
     minimatch.match(
       Object.keys(require.cache),
       `${basePath}/src/{shared/**,server/renderer.js}`
     ).forEach((modulePath) => {
       delete require.cache[modulePath];
     });
+
+    /* fs.writeFile(
+      './webpack/stats.json',
+      JSON.stringify(stats.toJson('verbose')),
+      'utf8'
+    ); */
   });
 }
 

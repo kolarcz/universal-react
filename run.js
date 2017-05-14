@@ -1,7 +1,9 @@
 require('babel-register');
 require('dotenv').config();
 
+const fs = require('fs');
 const program = require('commander');
+
 program
   .option('-b, --build', 'build production files')
   .option('-s, --server <env>', 'run server with selected env', /^(development|production)$/, null)
@@ -11,7 +13,13 @@ if (program.build) {
   const webpack = require('webpack');
   const webpackConfig = require('./webpack/makeConfig')('production');
 
-  webpack(webpackConfig, () => {});
+  webpack(webpackConfig, (err, stats) => {
+    fs.writeFile(
+      './webpack/stats.json',
+      JSON.stringify(stats.toJson('verbose')),
+      'utf8'
+    );
+  });
 }
 
 if (program.server) {
