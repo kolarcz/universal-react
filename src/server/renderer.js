@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 import React from 'react';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
+import serialize from 'serialize-javascript';
 
 import ApiClient from '../shared/apiClient';
 import makeRoutes from '../shared/makeRoutes';
@@ -40,7 +41,7 @@ export default function (req, res) {
     const assets = global.webpackIsomorphicTools.assets();
     const helmet = Helmet.renderStatic();
 
-    const stringifiedState = JSON.stringify(store.getState());
+    const serializedState = serialize(store.getState());
     const content = `<!DOCTYPE html>${ReactDOMServer.renderToString(
       <html lang="en" {...helmet.htmlAttributes.toComponent()}>
         <head>
@@ -62,7 +63,7 @@ export default function (req, res) {
         </head>
         <body {...helmet.bodyAttributes.toComponent()}>
           <div id="root" dangerouslySetInnerHTML={{ __html: root }} />
-          <script dangerouslySetInnerHTML={{ __html: `window.$STATE=${stringifiedState};` }} />
+          <script dangerouslySetInnerHTML={{ __html: `window.$STATE=${serializedState};` }} />
           {Object.keys(assets.javascript).map((key, i) =>
             <script src={assets.javascript[key]} key={i} />
           )}
