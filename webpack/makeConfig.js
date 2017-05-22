@@ -91,7 +91,7 @@ module.exports = (ENV) => {
           ? ['style-loader', 'css-loader?modules&sourceMap&localIdentName=[hash:base64:6]', 'postcss-loader']
           : ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: [`css-loader?modules&localIdentName=[hash:base64:8]`, 'postcss-loader']
+            use: ['css-loader?modules&localIdentName=[hash:base64:8]', 'postcss-loader']
           })
       }, {
         test: /\.scss$/,
@@ -100,7 +100,7 @@ module.exports = (ENV) => {
           ? ['style-loader', 'css-loader?modules&sourceMap&localIdentName=[hash:base64:6]', 'postcss-loader', 'sass-loader']
           : ExtractTextPlugin.extract({
             fallback: 'style-loader',
-            use: [`css-loader?modules&localIdentName=[hash:base64:8]`, 'postcss-loader', 'sass-loader']
+            use: ['css-loader?modules&localIdentName=[hash:base64:8]', 'postcss-loader', 'sass-loader']
           })
       }, {
         test: /\.css$/,
