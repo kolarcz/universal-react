@@ -19,8 +19,11 @@
   "globals": {
     "__DEV__": false,
     "__ENV__": false,
-    "__CLIENT__": false,
-    "document": false,
-    "window": false
+    "__CLIENT__": false
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
   }
 }

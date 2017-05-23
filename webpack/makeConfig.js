@@ -75,7 +75,7 @@ module.exports = (ENV) => {
           options: {
             presets: [
               'react',
-              ['env', { modules: false }]
+              ['env', { targets: { browsers: true }, modules: false }]
             ],
             plugins: [
               ['transform-runtime', { polyfill: false, regenerator: true, helpers: false }],
