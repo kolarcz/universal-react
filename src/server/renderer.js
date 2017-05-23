@@ -50,7 +50,7 @@ export default function (req, res) {
             name="viewport"
             content="width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no"
           />
-          {Object.keys(assets.styles).map((key) =>
+          {Object.keys(assets.styles).map(key =>
             <link rel="stylesheet" type="text/css" href={assets.styles[key]} key={key} />
           )}
           {helmet.base.toComponent()}
@@ -64,7 +64,7 @@ export default function (req, res) {
         <body {...helmet.bodyAttributes.toComponent()}>
           <div id="root" dangerouslySetInnerHTML={{ __html: root }} />
           <script dangerouslySetInnerHTML={{ __html: `window.$STATE=${serializedState};` }} />
-          {Object.keys(assets.javascript).map((key) =>
+          {Object.keys(assets.javascript).map(key =>
             <script src={assets.javascript[key]} key={key} />
           )}
         </body>

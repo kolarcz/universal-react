@@ -3,7 +3,6 @@
   "plugins": ["react"],
   "extends" : ["airbnb"],
   "rules": {
-    "arrow-parens": ["error", "always"],
     "comma-dangle": 0,
     "global-require": 0,
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
