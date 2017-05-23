@@ -3,6 +3,7 @@
   "plugins": ["react"],
   "extends" : ["airbnb"],
   "rules": {
+    "arrow-parens": ["error", "always"],
     "comma-dangle": 0,
     "global-require": 0,
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
@@ -12,9 +13,9 @@
     "no-param-reassign": ["error", { "props": false }],
     "no-shadow": 0,
     "no-underscore-dangle": 0,
-    "react/prefer-stateless-function": 0,
     "react/jsx-filename-extension": 0,
-    "react/jsx-no-bind": 0
+    "react/jsx-no-bind": 0,
+    "react/prefer-stateless-function": 0
   },
   "globals": {
     "__DEV__": false,
