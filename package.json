@@ -4,7 +4,6 @@
   "description": "Universal React",
   "main": "run.js",
   "scripts": {
-    "postinstall": "npm run build",
     "gencerts": "openssl req -x509 -newkey rsa:2048 -keyout ./certs/server.key -out ./certs/server.crt -days 36525 -subj \"/O=-\" -nodes",
     "lint": "node_modules/.bin/eslint --ext=.js,.jsx run.js src webpack || echo done",
     "flow": "node_modules/.bin/flow || echo done",
@@ -98,5 +97,6 @@
     "redux-logger": "3.0.6",
     "webpack-dev-middleware": "1.10.2",
     "webpack-hot-middleware": "2.18.0"
-  }
+  },
+  "heroku-run-build-script": true
 }
